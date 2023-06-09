@@ -1,0 +1,13 @@
+@import '../../App.scss';
+
+.main-title {
+    padding: 5px;
+    background-color: $COLOR_FLAT_SILVER;
+    text-align: center;
+    h3 {
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: $COLOR_FLAT_WET_ASP;
+    }
+}

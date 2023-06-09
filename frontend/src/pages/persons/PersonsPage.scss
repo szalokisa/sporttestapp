@@ -1,0 +1,19 @@
+@import '../../App.scss';
+
+.page-persons {
+    .form-area {
+        padding-top: 2rem;
+    }
+
+    .form-area.GRID {
+        display: none;
+    }
+
+    .grid-area.EDIT {
+        display: none;
+    }
+
+    .grid-area.DUPLICATE {
+        display: none;
+    }
+}

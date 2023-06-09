@@ -1,0 +1,13 @@
+@import '../../App.scss';
+
+.page-testsub {
+    background-color: rgb(107, 107, 210);
+
+    .grid-area.GRID {
+        background-color: rgb(220, 164, 164);
+    }
+
+    .form-area.EDIT {
+        background-color: rgb(116, 161, 116);
+    }
+}

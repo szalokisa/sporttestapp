@@ -1,0 +1,43 @@
+$COLOR_FLAT_TURQUOISE: #1abc9c;
+$COLOR_FLAT_GREEN_SEA: #16a085;
+$COLOR_FLAT_SUN_FLOWER: #f1c40f;
+$COLOR_FLAT_ORANGE: #f39c12;
+$COLOR_FLAT_EMERALD: #2ecc71;
+$COLOR_FLAT_NEPHRITIS: #27ae60;
+$COLOR_FLAT_CARROT: #e67e22;
+$COLOR_FLAT_PUMPKIN: #d35400;
+$COLOR_FLAT_PETER_RIVER: #3498db;
+$COLOR_FLAT_BELIZE_HOLE: #2980b9;
+$COLOR_FLAT_ALIZARIN: #e74c3c;
+$COLOR_FLAT_POMEGRANATE: #c0392b;
+$COLOR_FLAT_AMETHYST: #9b59b6;
+$COLOR_FLAT_WISTERIA: #8e44ad;
+$COLOR_FLAT_CLOUDS: #ecf0f1;
+$COLOR_FLAT_SILVER: #bdc3c7;
+$COLOR_FLAT_WET_ASP: #34495e;
+$COLOR_FLAT_MIDNIGHT: #2c3e50;
+$COLOR_FLAT_CONC: #95a5a6;
+$COLOR_FLAT_ASBE: #7f8c8d;
+$COLOR_WHITE: #fff;
+
+$theme-colors: (
+    "info": $COLOR_FLAT_CONC,
+    "success": $COLOR_FLAT_CARROT,
+    "secondary": $COLOR_FLAT_MIDNIGHT,
+);
+
+@import "~bootstrap/scss/bootstrap";
+
+header {
+    .logo-area {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+header {
+    .logo-area {
+        width: 150px;
+    }
+}
+}

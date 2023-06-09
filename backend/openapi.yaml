@@ -1,0 +1,525 @@
+openapi: 3.0.0
+info:
+  description: "This is the short description of easyLogin endpoints."
+  version: 1.0.0
+  title: SportTestApp
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: szaloki.sandor@selester.hu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:4000
+  - url: https://sporttest.icymoss-3422d65a.westeurope.azurecontainerapps.io
+tags:
+  - name: api
+    description: Checking service availability
+  - name: api-docs
+    description: Get this documentation from server
+  - name: data
+    description: get reports data
+  - name: users
+    description: manage user's data
+  - name: persons
+    description: manage user's data
+  - name: sportabilities
+    description: manage sport ability data
+  - name: combodata
+    description: get combo data
+  - name: gridcombodata
+    description: get grid combo data
+paths:
+  /api/heartbeat:
+    get:
+      tags:
+        - api
+      summary: Checking service availability
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+  /api-docs:
+    get:
+      tags:
+        - api-docs
+      summary: Get this documentation
+      responses:
+        "200":
+          description: OK
+  /data/:
+    get:
+      tags:
+        - data
+      summary: Get data from SQL-Server
+      parameters:
+        - in: header
+          name: token
+          description: valid token
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: select
+          description: list of fields
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: top
+          description: max amount of datarows
+          schema:
+            type: integer
+        - in: header
+          name: from
+          description: name of the SQL-datatable / view
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: where
+          description: WHERE segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: groupby
+          description: GROUP BY segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: orderby
+          description: ORDER BY segment of the sql statement
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: language
+          description: Language of the language-sensitive data (only 'H' is supported at the moment.)
+          schema:
+            type: string
+        - in: header
+          name: pageNo
+          description: The page of the list.)
+          schema:
+            type: string
+        - in: header
+          name: rowsperpage
+          description: Count of records on a page.)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Downloads data from the SQL-Server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/column"
+                  data:
+                    type: array
+                    items:
+                      type: object
+        "400":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /users/:
+    put:
+      tags:
+        - users
+      summary: manage user's data
+      parameters:
+        - in: header
+          name: email
+          description: user's email address
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: password
+          description: user's password
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: userlevel
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: User login by email
+      parameters:
+        - in: header
+          name: email
+          description: user's email address
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: password
+          description: user's password
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: login successfull
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+        "400":
+          description: login failed
+  /persons:
+    get:
+      tags:
+        - persons
+      summary: manage person's data
+      parameters:
+        - in: header
+          name: ID
+          description: user's ID
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/column"
+
+    put:
+      tags:
+        - persons
+      summary: Update or insert persons
+      parameters:
+        - in: header
+          name: ID
+          description: person's ID
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: PersonName
+          description: person's name
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: BirthDay
+          description: date of birth
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: EmailAddress
+          description: email address
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Gender
+          description: gender
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: ClubID
+          description: club ID
+          required: false
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: login successfull
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+        "400":
+          description: login failed
+  /sportabilities:
+    get:
+      tags:
+        - sportabilities
+      summary: manage sport ability data
+      parameters:
+        - in: header
+          name: ID
+          description: sport ability ID
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/column"
+
+    delete:
+      tags:
+        - sportabilities
+      summary: delte sport ability data
+      parameters:
+        - in: header
+          name: ID
+          description: sport ability ID
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/column"
+    put:
+      tags:
+        - sportabilities
+      summary: Update or insert persons
+      parameters:
+        - in: header
+          name: ID
+          description: sport ability ID
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: SportAbilityName
+          description: sport ability name
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Remark
+          description: remark
+          schema:
+            type: string
+      responses:
+        "200":
+          description: login successfull
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+        "400":
+          description: login failed
+  /combodata/:
+    put:
+      tags:
+        - combodata
+      summary: Get data from SQL-Server
+      parameters:
+        - in: header
+          name: token
+          description: valid token
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: select
+          description: list of fields
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: top
+          description: max amount of datarows
+          schema:
+            type: integer
+        - in: header
+          name: from
+          description: name of the SQL-datatable / view
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: where
+          description: WHERE segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: groupby
+          description: GROUP BY segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: orderby
+          description: ORDER BY segment of the sql statement
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: language
+          description: Language of the language-sensitive data (only 'H' is supported at the moment.)
+          schema:
+            type: string
+        - in: header
+          name: pageNo
+          description: The page of the list.)
+          schema:
+            type: string
+        - in: header
+          name: rowsperpage
+          description: Count of records on a page.)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Downloads data from the SQL-Server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/column"
+                  data:
+                    type: array
+                    items:
+                      type: object
+        "400":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /gridcombodata/:
+    put:
+      tags:
+        - gridcombodata
+      summary: Get data from SQL-Server
+      parameters:
+        - in: header
+          name: token
+          description: valid token
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: select
+          description: list of fields
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: top
+          description: max amount of datarows
+          schema:
+            type: integer
+        - in: header
+          name: from
+          description: name of the SQL-datatable / view
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: where
+          description: WHERE segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: groupby
+          description: GROUP BY segment of the sql statement
+          schema:
+            type: string
+        - in: header
+          name: orderby
+          description: ORDER BY segment of the sql statement
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: language
+          description: Language of the language-sensitive data (only 'H' is supported at the moment.)
+          schema:
+            type: string
+        - in: header
+          name: pageNo
+          description: The page of the list.)
+          schema:
+            type: string
+        - in: header
+          name: rowsperpage
+          description: Count of records on a page.)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Downloads data from the SQL-Server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/column"
+                  data:
+                    type: array
+                    items:
+                      type: object
+        "400":
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+components:
+  schemas:
+    heartbeat:
+      type: object
+      properties:
+        heartbeat:
+          type: boolean
+        version:
+          type: string
+        dbConnection:
+          type: boolean
+    error:
+      type: object
+      properties:
+        message:
+          type: string
+    column:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string

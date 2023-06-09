@@ -1,0 +1,12 @@
+.form-organisation {
+    .btn-area {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 5% 20px 5%;
+
+        button {
+            width: 25%
+        }
+    }
+}
