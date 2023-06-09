@@ -105,7 +105,7 @@ export default function ExercisesGrid(props) {
     }, []);
 
     const onCellValueChanged = useCallback((event) => {
-        console.log('+++ ExercisesGrid.js (line: 106)',event);
+        console.log('+++ ExercisesGrid.js (line: 106)', event);
         SaveData(event.data);
     }, []);
 
@@ -130,7 +130,29 @@ export default function ExercisesGrid(props) {
                 console.error(err);
             });
     }
- 
+
+    function createNewRowData() {
+        const newData = {
+            ID: 0,
+            ExerciseName: "-",
+            ExerciseDescription: "-",
+            SportAbilityName: "---",
+            ResToExString: "",
+        };
+        return newData;
+    }
+
+    function addItem() {
+        const newItems = [
+            createNewRowData(),
+        ];
+        const res = gridRef.current.api.applyTransaction({
+            add: newItems,
+            addIndex: 0,
+        });
+        return res;
+    };
+
     function ShowData() {
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
@@ -167,6 +189,9 @@ export default function ExercisesGrid(props) {
     }
 
     return (<div className="ExercisesGrid">
+        <div className='btn-area'>
+            <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+        </div>
         <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 300 }}>
             <AgGridReact ref={gridRef}
                 rowData={rowData}
