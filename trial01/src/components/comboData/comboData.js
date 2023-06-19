@@ -18,7 +18,6 @@ export default async function ComboData(props) {
         },
 
     }).then((jsonData) => {
-        console.log('+++ comboData.js (line: 22)',jsonData);
         ret = jsonData.data.data;
     }).catch((err) => {
         console.error(err);

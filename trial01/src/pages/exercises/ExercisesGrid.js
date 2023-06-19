@@ -81,7 +81,10 @@ export default function ExercisesGrid(props) {
 
     // // Example of consuming Grid Event
     const cellClickedListener = useCallback(event => {
-        props.biRef.ShowDataChildFromParent({ myID: event.data.ID });
+        props.biRef.ExerciseGridShowDataChildFromParent({ myID: event.data.ID });
+        props.biRef.ExerciseGridSetParentID({ myID: event.data.ID });
+
+        // props.setCurrentExerciseId(event.data.ID);
     }, []);
 
     useEffect(() => {
@@ -105,12 +108,10 @@ export default function ExercisesGrid(props) {
     }, []);
 
     const onCellValueChanged = useCallback((event) => {
-        console.log('+++ ExercisesGrid.js (line: 106)', event);
         SaveData(event.data);
     }, []);
 
     async function SaveData(saveprops) {
-        console.log('+++ ExercisesGrid.js (line: 111)', saveprops);
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID }
         axios.put(ExercisesURL, {
@@ -123,7 +124,6 @@ export default function ExercisesGrid(props) {
             }
         })
             .then((result) => {
-                // props.onSubmit({ id: props.id });
                 return;
             })
             .catch((err) => {
@@ -181,7 +181,6 @@ export default function ExercisesGrid(props) {
             })
             .then((jsonData) => {
                 setRowData(jsonData.data);
-                console.log('+++ ExercisesGrid.js (line: 143)', jsonData.data);
             })
             .catch((err) => {
                 console.log('+++ ExercisesGrid.js (line: 71)', err);
@@ -199,9 +198,9 @@ export default function ExercisesGrid(props) {
                 getRowId={getRowId}
                 defaultColDef={defaultColDef}
                 animateRows={true}
+                onCellValueChanged={onCellValueChanged}
                 navigateToNextCell={navigateToNextCell}
                 onCellClicked={cellClickedListener}
-                onCellValueChanged={onCellValueChanged}
                 rowSelection='simple'>
             </AgGridReact>
         </div>

@@ -9,17 +9,24 @@ function ExercisesPage(props) {
     const [view, setView] = useState('HEAD');
     const [currentExerciseId, setCurrentExerciseId] = useState();
 
-    function ShowDataChildFromParent(props) {
-        biRef.ShowDataChild(props);
+    function PageShowDataChildFromParent(props) {
+        biRef.resToExShowDataChild(props);
+    }
+
+    function PageSetParentID(props) {
+        console.log('+++ ExercisesPage.js (line: 17)',props);
+        biRef.resToExSetParID(props);
     }
 
     // Add all the functions here that the child can call.
     var biRef = {
-        ShowDataChildFromParent: ShowDataChildFromParent
+        ExerciseGridShowDataChildFromParent: PageShowDataChildFromParent,
+        ExerciseGridSetParentID: PageSetParentID,
     }
 
     function editExercise(Message_File_ID) {
         setCurrentExerciseId(Message_File_ID);
+        console.log('+++ ExercisesPage.js (line: 29)', currentExerciseId);
         setView('EDIT');
     }
 
@@ -34,13 +41,13 @@ function ExercisesPage(props) {
                 <ExercisesGrid
                     language={props.language}
                     biRef={biRef}
-                    edit={(id) => editExercise(id)}
+                    // edit={(id) => editExercise(id)}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     sportAbilitiesComboData={props.sportAbilitiesComboData}
                     token={props.token}
-                    setCurrentExerciseId={setCurrentExerciseId}
+                    // setCurrentExerciseId={setCurrentExerciseId}
                     setView={setView}
-                    />
+                />
             </div>
         }
         {
@@ -51,7 +58,7 @@ function ExercisesPage(props) {
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     token={props.token}
-                    currentExerciseId={currentExerciseId}
+                    // currentExerciseId={currentExerciseId}
                     unitComboData={props.unitComboData}
                     onCancel={editResToExCancelled}
                     setView={setView}

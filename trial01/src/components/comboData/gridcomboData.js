@@ -18,7 +18,6 @@ export default async function GridComboData(props) {
         },
 
     }).then((jsonData) => {
-        console.log('+++ comboData.js (line: 22)',jsonData);
         ret = jsonData;
     }).catch((err) => {
         console.error(err);

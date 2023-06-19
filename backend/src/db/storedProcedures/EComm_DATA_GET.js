@@ -3,7 +3,6 @@ import { db, sqlConfig } from '../dbConnection';
 
 export async function EComm_DATA_GET(queryParams) {
   db.initiateConnection(sqlConfig);
-  console.log('+++ EComm_DATA_GET.js (line: 6)',queryParams);
   const storedProcedure = new StoredProcedure('EComm_DATA_GET')
   const sqlTop = queryParams.top ?? 0;
   storedProcedure.addParam(

@@ -9,10 +9,19 @@ export const exercisesController = {
             next(error);
         }
     },
-    
+
     async save_Exercises(req, res, next) {
         try {
             const result = await exercisesService.save_data(req.body.headers);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async save_ResToEx(req, res, next) {
+        try {
+            const result = await exercisesService.save_restoex(req.body.headers);
             res.status(200).json(result);
         } catch (error) {
             next(error);
