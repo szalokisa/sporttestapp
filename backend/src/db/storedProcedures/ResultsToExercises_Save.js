@@ -6,6 +6,7 @@ export async function ResultsToExercises_Save(queryParams) {
     const storedProcedure = new StoredProcedure('ResultsToExercises_Save')
 
     storedProcedure.addParam('ID', 'int', queryParams.ID);
+    storedProcedure.addParam('ExerciseID', 'int', queryParams.ExerciseID);
     storedProcedure.addParam('ExerciseName', 'NVarChar', queryParams.ExerciseName, { length: '250' });
     storedProcedure.addParam('ResultTypeDescription', 'NVarChar', queryParams.ResultTypeDescription, { length: '250' });
     storedProcedure.addParam('UnitName', 'NVarChar', queryParams.UnitName, { length: '100' });

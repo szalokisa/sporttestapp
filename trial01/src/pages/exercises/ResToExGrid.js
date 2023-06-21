@@ -13,11 +13,16 @@ const ResToExURL = `${process.env.REACT_APP_API_BASE_URL}/exercises/restoex`;
 export default function ResToExGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-    const [parentID, setParentID] = useState();
+    const [parentID, setParentID] = useState(0);
+    const pID = useRef(0);
 
     const getRowId = useCallback(function (params) {
         return params.data.ID;
     }, []);
+
+    useEffect(() => {
+        pID.current = parentID;
+    }, [parentID])
 
     const [columnDefs, setColumnDefs] = useState([
         {
@@ -57,6 +62,7 @@ export default function ResToExGrid(props) {
     }));
 
     function addItem() {
+        console.log('+++ ResToExGrid.js (line: 67)',pID);
         const newItems = [
             createNewRowData(),
         ];
@@ -76,14 +82,12 @@ export default function ResToExGrid(props) {
         return newData;
     }
 
-    // props.biRef.ShowDataChild = ShowDataChild;
     props.biRef.resToExShowDataChild = ShowDataChild;
     props.biRef.resToExSetParID = SetParID;
 
     function SetParID(pr) {
-        console.log('+++ ResToExGrid.js (line: 84)', pr.myID);
-        setParentID(pr.myID);
-        console.log('+++ ResToExGrid.js (line: 86)', parentID);
+        console.log('+++ ResToExGrid.js (line: 84)', pr);
+        setParentID(pr.myID)
     }
 
     function closeMe() {
@@ -120,7 +124,6 @@ export default function ResToExGrid(props) {
             })
             .then((jsonData) => {
                 setRowData(jsonData.data);
-                console.log('+++ ResToExGrid.js (line: 123)',rowData);
             })
             .catch((err) => {
                 console.log('+++ ExercisesGrid.js (line: 71)', err);
@@ -129,7 +132,8 @@ export default function ResToExGrid(props) {
 
     async function SaveData(saveprops) {
         let recID = 0;
-        if (saveprops.ID) { recID = saveprops.ID }
+        if (saveprops.ID) { recID = saveprops.ID };
+
         axios.put(ResToExURL, {
             headers: {
                 'Content-Type': 'application/json',
@@ -137,6 +141,7 @@ export default function ResToExGrid(props) {
                 ExerciseName: saveprops.ExerciseName,
                 ResultTypeDescription: saveprops.ResultTypeDescription,
                 UnitName: saveprops.UnitName,
+                ExerciseID: saveprops.ExerciseID,
             }
         })
             .then((result) => {
@@ -148,8 +153,17 @@ export default function ResToExGrid(props) {
     }
 
     const onCellValueChanged = useCallback((event) => {
-        console.log('+++ ResToExGrid.js (line: 151)', parentID);
-        SaveData(event.data);
+        let dataJson;
+        try {
+            let dataJsonStr = JSON.stringify(event.data);
+            dataJson = JSON.parse(dataJsonStr);
+            dataJson['ExerciseID'] = pID.current;
+            console.log('+++ ResToExGrid.js (line: 154)', dataJson);
+        }
+        catch (err) {
+            console.log('+++ ResToExGrid.js (line: 153)', err);
+        }
+        SaveData(dataJson);
     }, []);
 
     return (<div className="ResToExGrid">

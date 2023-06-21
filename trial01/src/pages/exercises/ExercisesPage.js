@@ -14,7 +14,6 @@ function ExercisesPage(props) {
     }
 
     function PageSetParentID(props) {
-        console.log('+++ ExercisesPage.js (line: 17)',props);
         biRef.resToExSetParID(props);
     }
 
