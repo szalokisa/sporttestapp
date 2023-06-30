@@ -11,7 +11,7 @@ export default (props) => {
     return (
         <span>
             <span>{cellValue}</span>&nbsp;
-            <button onClick={() => buttonClicked()}>Várt eredmények</button>
+            <button onClick={() => buttonClicked()}>...</button>
         </span>
     );
 };

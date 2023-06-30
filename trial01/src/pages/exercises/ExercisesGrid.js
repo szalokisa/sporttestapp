@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import saveRenderer from '../../components/renderers/saveRenderer';
+// import saveRenderer from '../../components/renderers/saveRenderer';
 import deleteRenderer from '../../components/renderers/deleteRenderer';
 import openRenderer from '../../components/renderers/openRenderer';
 import axios from 'axios';
@@ -60,7 +60,8 @@ export default function ExercisesGrid(props) {
         },
         {
             field: 'btnopen',
-            headerName: 'Várt eredmények szerkesztése',
+            width: 70,
+            headerName: '...',
             cellRenderer: openRenderer,
             cellRendererParams: {
                 form: 'Exercises',
@@ -79,13 +80,16 @@ export default function ExercisesGrid(props) {
         sortable: true
     }));
 
-    // // Example of consuming Grid Event
     const cellClickedListener = useCallback(event => {
         props.biRef.ExerciseGridShowDataChildFromParent({ myID: event.data.ID });
         props.biRef.ExerciseGridSetParentID({ myID: event.data.ID });
-
-        // props.setCurrentExerciseId(event.data.ID);
     }, []);
+
+    function _FnRefreshGrid() {
+        ShowData();
+    }
+
+    props.biRef.exGridClosed = _FnRefreshGrid;
 
     useEffect(() => {
         ShowData();
@@ -183,7 +187,7 @@ export default function ExercisesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ExercisesGrid.js (line: 71)', err);
+                console.log('+++ ExercisesGrid.js (line: 207)', err);
             });
     }
 
@@ -206,4 +210,3 @@ export default function ExercisesGrid(props) {
         </div>
     </div>)
 }
-

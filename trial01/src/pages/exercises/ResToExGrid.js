@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback, Component } from 'react';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
-// import { createRoot } from 'react-dom/client';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import saveRenderer from '../../components/renderers/saveRenderer';
 import deleteRenderer from '../../components/renderers/deleteRenderer';
 import axios from 'axios';
-// import { GridApi } from 'ag-grid-community';
 
 const ResToExURL = `${process.env.REACT_APP_API_BASE_URL}/exercises/restoex`;
 
@@ -62,7 +60,6 @@ export default function ResToExGrid(props) {
     }));
 
     function addItem() {
-        console.log('+++ ResToExGrid.js (line: 67)',pID);
         const newItems = [
             createNewRowData(),
         ];
@@ -86,12 +83,13 @@ export default function ResToExGrid(props) {
     props.biRef.resToExSetParID = SetParID;
 
     function SetParID(pr) {
-        console.log('+++ ResToExGrid.js (line: 84)', pr);
         setParentID(pr.myID)
     }
 
     function closeMe() {
         props.setView("HEAD");
+        props.exGridClosed();
+        props.setRefreshId(currentRefreshId => (currentRefreshId + 1));
     }
 
     function ShowDataChild(pr) {
@@ -158,7 +156,6 @@ export default function ResToExGrid(props) {
             let dataJsonStr = JSON.stringify(event.data);
             dataJson = JSON.parse(dataJsonStr);
             dataJson['ExerciseID'] = pID.current;
-            console.log('+++ ResToExGrid.js (line: 154)', dataJson);
         }
         catch (err) {
             console.log('+++ ResToExGrid.js (line: 153)', err);

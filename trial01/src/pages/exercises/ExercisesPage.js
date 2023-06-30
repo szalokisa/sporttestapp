@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useState } from "react";
 import TitleBar from "../../components/titleBar/TitleBar";
 import ExercisesGrid from "./ExercisesGrid";
@@ -7,7 +7,7 @@ import './ExercisesPage.scss';
 
 function ExercisesPage(props) {
     const [view, setView] = useState('HEAD');
-    const [currentExerciseId, setCurrentExerciseId] = useState();
+    const [refreshId, setRefreshId] = useState(0);
 
     function PageShowDataChildFromParent(props) {
         biRef.resToExShowDataChild(props);
@@ -17,17 +17,20 @@ function ExercisesPage(props) {
         biRef.resToExSetParID(props);
     }
 
+    function exGridClosed() {
+        biRef.exGridClosed();
+    }
+
     // Add all the functions here that the child can call.
     var biRef = {
         ExerciseGridShowDataChildFromParent: PageShowDataChildFromParent,
         ExerciseGridSetParentID: PageSetParentID,
+        exGridClosed: exGridClosed,
     }
 
-    function editExercise(Message_File_ID) {
-        setCurrentExerciseId(Message_File_ID);
-        console.log('+++ ExercisesPage.js (line: 29)', currentExerciseId);
-        setView('EDIT');
-    }
+    // function refreshGrid() {
+    //     setRefreshId(currentRefreshId => (currentRefreshId + 1));
+    // }
 
     function editResToExCancelled() {
         setView('RESTOEXGRID');
@@ -40,11 +43,9 @@ function ExercisesPage(props) {
                 <ExercisesGrid
                     language={props.language}
                     biRef={biRef}
-                    // edit={(id) => editExercise(id)}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     sportAbilitiesComboData={props.sportAbilitiesComboData}
                     token={props.token}
-                    // setCurrentExerciseId={setCurrentExerciseId}
                     setView={setView}
                 />
             </div>
@@ -57,10 +58,12 @@ function ExercisesPage(props) {
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     token={props.token}
-                    // currentExerciseId={currentExerciseId}
                     unitComboData={props.unitComboData}
                     onCancel={editResToExCancelled}
+                    refreshId={refreshId}
+                    setRefreshId={setRefreshId}
                     setView={setView}
+                    exGridClosed={exGridClosed}
                 />
             </div>
         }
