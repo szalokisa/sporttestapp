@@ -3,12 +3,11 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-// import saveRenderer from '../../components/renderers/saveRenderer';
-import deleteRenderer from '../../components/renderers/deleteRenderer';
 import openRenderer from '../../components/renderers/openRenderer';
 import axios from 'axios';
 
 const ExercisesURL = `${process.env.REACT_APP_API_BASE_URL}/exercises`;
+const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
 export default function ExercisesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -53,7 +52,7 @@ export default function ExercisesGrid(props) {
         },
         {
             headerName: 'Várt eredmények',
-            minWidth: 150,
+            minWidth: 250,
             field: 'ResToExString',
             filter: false,
             editable: false
@@ -67,11 +66,6 @@ export default function ExercisesGrid(props) {
                 form: 'Exercises',
                 setView: props.setView
             }
-        },
-        {
-            field: 'btndelete',
-            headerName: 'Törlés',
-            cellRenderer: deleteRenderer
         },
     ]);
 
@@ -157,6 +151,28 @@ export default function ExercisesGrid(props) {
         return res;
     };
 
+    function delRow1() {
+        props.setView("trash1")
+    }
+
+    function delRow2() {
+        const selectedData = gridRef.current.api.getSelectedRows();
+        const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
+        axios.delete(DeleteRecordURL, {
+            headers: { data: deletedIds, datatable: "Exercises" }
+        }).then(() => {
+            ShowData()
+        }).catch((err) => {
+            console.error(err);
+        })
+
+        props.setView("HEAD")
+    }
+
+    function delRowCancel() {
+        props.setView("HEAD")
+    }
+
     function ShowData() {
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
@@ -192,8 +208,17 @@ export default function ExercisesGrid(props) {
     }
 
     return (<div className="ExercisesGrid">
-        <div className='btn-area'>
+        <div className='btnnew-area'>
             <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+        </div>
+        <div className={`exercisebtndel1 ${props.view}`}>
+            <button onClick={delRow1}>Kijelöltek törlése</button>
+        </div>
+        <div className={`exercisebtncancel ${props.view}`}>
+            <button onClick={delRowCancel}>Mégsem</button>
+        </div>
+        <div className={`exercisebtndel2 ${props.view}`}>
+            <button onClick={delRow2}>Törlés megerősítése</button>
         </div>
         <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 300 }}>
             <AgGridReact ref={gridRef}
@@ -205,7 +230,7 @@ export default function ExercisesGrid(props) {
                 onCellValueChanged={onCellValueChanged}
                 navigateToNextCell={navigateToNextCell}
                 onCellClicked={cellClickedListener}
-                rowSelection='simple'>
+                rowSelection='multiple'>
             </AgGridReact>
         </div>
     </div>)

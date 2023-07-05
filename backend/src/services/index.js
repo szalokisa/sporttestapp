@@ -6,3 +6,4 @@ export * from './combodataService';
 export * from './sportabilitiesService';
 export * from './exercisesService';
 export * from './subgriddataService';
+export * from './delrecService';

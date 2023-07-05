@@ -47,6 +47,7 @@ function ExercisesPage(props) {
                     sportAbilitiesComboData={props.sportAbilitiesComboData}
                     token={props.token}
                     setView={setView}
+                    view={view}
                 />
             </div>
         }

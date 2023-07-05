@@ -7,3 +7,4 @@ export * from './combodataController';
 export * from './sportabilitiesController';
 export * from './exercisesController';
 export * from './subgriddataController';
+export * from './delrecController';

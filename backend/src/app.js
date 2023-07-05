@@ -6,7 +6,7 @@ const cors = require('cors');
 import {
     api, docs, data, users,
     persons, organisations, combodata,
-    sportabilities, exercises, subgriddata, gridcombodata
+    sportabilities, exercises, subgriddata, gridcombodata, delrec
 } from './routes';
 import errorHandler from './middlewares/error-handler';
 
@@ -25,6 +25,7 @@ app.use('/gridcombodata', gridcombodata);
 app.use('/sportabilities', sportabilities);
 app.use('/exercises', exercises);
 app.use('/subgriddata', subgriddata);
+app.use('/deleterec', delrec);
 
 app.use(errorHandler);
 export default app;

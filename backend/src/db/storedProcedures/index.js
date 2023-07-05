@@ -18,6 +18,8 @@ export * from './Exercises_Save';
 export * from './Exercises_Delete';
 export * from './SubGrid_DATA_GET';
 export * from './ResultsToExercises_Save';
+export * from './DELETE_RECORDS';
+
 
 
 

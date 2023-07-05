@@ -1,20 +1,46 @@
 @import '../../App.scss';
 
 .page-exercises {
-    .grid1.HEAD {
-        padding-top: 1rem;
-    }
 
     .grid2.HEAD {
+        display: none;
+    }
+
+    .grid2.trash1 {
         display: none;
     }
 
     .grid1.CHILD {
         display: none;
     }
-
-    .grid2.CHILD {
-        padding-top: 1rem;
+  
+    .grid1.restrash1 {
+        display: none;
     }
+
+    .exercisebtndel2.HEAD {
+        display: none;
+    }
+
+    .exercisebtndel2.CHILD {
+        display: none;
+    }
+
+    .exercisebtndel1.trash1 {
+        display: none;
+    }
+
+    .exercisebtndel1.restrash1 {
+        display: none;
+    }
+
+    .exercisebtncancel.HEAD {
+        display: none;
+    }
+
+    .exercisebtncancel.CHILD {
+        display: none;
+    }
+
 
 }

@@ -2,11 +2,10 @@ import React, { useState, useRef, useEffect, useMemo, useCallback, Component } f
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import saveRenderer from '../../components/renderers/saveRenderer';
-import deleteRenderer from '../../components/renderers/deleteRenderer';
 import axios from 'axios';
 
 const ResToExURL = `${process.env.REACT_APP_API_BASE_URL}/exercises/restoex`;
+const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
 export default function ResToExGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -42,16 +41,6 @@ export default function ResToExGrid(props) {
                 values: props.unitComboData.data
             },
 
-        },
-        {
-            field: 'btnsave',
-            headerName: '...Adat mentése',
-            cellRenderer: saveRenderer,
-        },
-        {
-            field: 'btndelete',
-            headerName: 'Adat törlése',
-            cellRenderer: deleteRenderer
         },
     ]);
 
@@ -94,7 +83,6 @@ export default function ResToExGrid(props) {
 
     function ShowDataChild(pr) {
         let mywhere = `ExerciseID = ${pr.myID}`;
-
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
             mode: 'cors',
@@ -124,7 +112,7 @@ export default function ResToExGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ExercisesGrid.js (line: 71)', err);
+                console.log('+++ ResToExGrid.js (line: 116)', err);
             });
     }
 
@@ -163,6 +151,28 @@ export default function ResToExGrid(props) {
         SaveData(dataJson);
     }, []);
 
+    function delRow1() {
+        props.setView("restrash1")
+    }
+
+    function delRow2() {
+        const selectedData = gridRef.current.api.getSelectedRows();
+        const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
+        axios.delete(DeleteRecordURL, {
+            headers: { data: deletedIds, datatable: "ResultsToExercises" }
+        }).then(() => {
+            let pr = {myID: parentID};
+            ShowDataChild(pr)
+        }).catch((err) => {
+            console.error(err);
+        })
+        props.setView("CHILD")
+    }
+
+    function delRowCancel() {
+        props.setView("CHILD")
+    }
+
     return (<div className="ResToExGrid">
         <h2>Várt eredmények {parentID} </h2>
         <div className='btn-area'>
@@ -170,6 +180,15 @@ export default function ResToExGrid(props) {
             <button type='button' className='btn btn-secondary' onClick={closeMe}>
                 Bezár
             </button>
+        </div>
+        <div className={`exercisebtndel1 ${props.view}`}>
+            <button onClick={delRow1}>Kijelöltek törlése</button>
+        </div>
+        <div className={`exercisebtncancel ${props.view}`}>
+            <button onClick={delRowCancel}>Mégsem</button>
+        </div>
+        <div className={`exercisebtndel2 ${props.view}`}>
+            <button onClick={delRow2}>Törlés megerősítése</button>
         </div>
         <div className="ag-theme-alpine-dark" style={{ width: 900, height: 300 }}>
             <AgGridReact ref={gridRef}
@@ -179,7 +198,7 @@ export default function ResToExGrid(props) {
                 defaultColDef={defaultColDef}
                 animateRows={true}
                 onCellValueChanged={onCellValueChanged}
-                rowSelection='simple'>
+                rowSelection='multiple'>
             </AgGridReact>
         </div>
 
