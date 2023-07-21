@@ -10,9 +10,7 @@ export const combodataService = {
     },
 
     async getgridcombodata(queryParams) {
-        console.log('+++ combodataService.js (line: 13)', queryParams);
         let resData = await Combo_DATA_GET(queryParams);
-        console.log('+++ combodataService.js (line: 15)', resData);
         let result = [];
         if (queryParams.with0 === "true") {
             resData.data.unshift({ FieldValue: '---' })
@@ -20,7 +18,6 @@ export const combodataService = {
         for (var i = 0; i < resData.data.length; i++) {
             result.push(resData.data[i].FieldValue)
         }
-        console.log('+++ combodataService.js (line: 21)', result);
         return result;
     },
 }

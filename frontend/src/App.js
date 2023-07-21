@@ -15,6 +15,7 @@ function App() {
   const [token, setToken] = useState();
   const [clubComboData, setClubComboData] = useState();
   const [sportAbilitiesComboData, setSportAbilitiesComboData] = useState();
+  const [unitComboData, setUnitComboData] = useState();
 
   return (
     <div className="App">
@@ -39,6 +40,7 @@ function App() {
                 token={token}
                 setClubComboData={setClubComboData}
                 setSportAbilitiesComboData={setSportAbilitiesComboData}
+                setUnitComboData={setUnitComboData}
               />
             } />
             <Route path="/logout" element={
@@ -49,43 +51,43 @@ function App() {
             } />
             <Route path="/persons" element={
               <PersonsPage
-              language={language}
-              token={token}
-              setClubComboData={setClubComboData}
-              clubComboData={clubComboData}
-            />
+                language={language}
+                token={token}
+                setClubComboData={setClubComboData}
+                clubComboData={clubComboData}
+              />
             } />
             <Route path="/sportabilities" element={
               <SportAbilitiesPage
-              language={language}
-              setToken={setToken}
-              token={token}
-              setSportAbilitiesComboData={setSportAbilitiesComboData}
-            />
+                language={language}
+                setToken={setToken}
+                token={token}
+                setSportAbilitiesComboData={setSportAbilitiesComboData}
+              />
             } />
             <Route path="/organisations" element={
               <OrganisationsPage
-              language={language}
-              setToken={setToken}
-              token={token}
-              setClubComboData={setClubComboData}
-            />
+                language={language}
+                setToken={setToken}
+                token={token}
+                setClubComboData={setClubComboData}
+              />
             } />
             <Route path="/exercises" element={
               <ExercisesPage
-              language={language}
-              setToken={setToken}
-              token={token}
-              setSportAbilitiesComboData={setSportAbilitiesComboData}
-              sportAbilitiesComboData={sportAbilitiesComboData}
-            />
+                language={language}
+                setToken={setToken}
+                token={token}
+                sportAbilitiesComboData={sportAbilitiesComboData}
+                unitComboData={unitComboData}
+              />
             } />
             <Route path="/testsub" element={
               <TestSubPage
-              language={language}
-              setToken={setToken}
-              token={token}
-            />
+                language={language}
+                setToken={setToken}
+                token={token}
+              />
             } />
           </Routes>
         </div>

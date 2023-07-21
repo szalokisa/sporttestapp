@@ -36,5 +36,15 @@ export const dataController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async saveData(req, res, next) {
+        let result;
+        try {
+            result = await dataService.saveData(req.body.headers);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
     }
 }

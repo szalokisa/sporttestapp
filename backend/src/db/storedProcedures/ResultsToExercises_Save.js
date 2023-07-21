@@ -2,7 +2,6 @@ import { StoredProcedure } from '@selesterkft/sel-db';
 import { db } from '../dbConnection';
 
 export async function ResultsToExercises_Save(queryParams) {
-    console.log('+++ ResultsToExercises_Save.js (line: 5)', queryParams);
     const storedProcedure = new StoredProcedure('ResultsToExercises_Save')
 
     storedProcedure.addParam('ID', 'int', queryParams.ID);

@@ -5,10 +5,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import openRenderer from '../../components/renderers/openRenderer';
 import axios from 'axios';
 
-const ExercisesURL = `${process.env.REACT_APP_API_BASE_URL}/exercises`;
+const SportAbilitiesURL = `${process.env.REACT_APP_API_BASE_URL}/sportabilities`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
-export default function ExercisesGrid(props) {
+export default function SportabilitiesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
@@ -23,7 +23,7 @@ export default function ExercisesGrid(props) {
         },
         {
             headerName: 'Megnevezés',
-            field: 'ExerciseName',
+            field: 'SportAbilityName',
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
             filter: true,
@@ -31,40 +31,12 @@ export default function ExercisesGrid(props) {
         },
         {
             headerName: 'Leírás',
-            field: 'ExerciseDescription',
+            field: 'Remark',
             cellEditor: 'agLargeTextCellEditor',
             cellEditorPopup: true,
             filter: true,
+            minWidth: 500,
             editable: true
-        },
-        {
-            headerName: 'Képesség/típus',
-            minWidth: 100,
-            field: 'SportAbilityName',
-            cellEditorPopup: false,
-            cellEditor: 'agSelectCellEditor',
-            cellEditorParams: {
-                values: props.sportAbilitiesComboData.data
-            },
-            filter: true,
-            editable: true
-        },
-        {
-            headerName: 'Várt eredmények',
-            minWidth: 250,
-            field: 'ResToExString',
-            filter: false,
-            editable: false
-        },
-        {
-            field: 'btnopen',
-            width: 70,
-            headerName: '...',
-            cellRenderer: openRenderer,
-            cellRendererParams: {
-                form: 'Exercises',
-                setView: props.setView
-            }
         },
     ]);
 
@@ -73,17 +45,9 @@ export default function ExercisesGrid(props) {
         sortable: true
     }));
 
-    const cellClickedListener = useCallback(event => {
-        props.biRef.ExerciseGridShowDataChildFromParent({ myID: event.data.ID });
-        props.biRef.ExerciseGridSetParentID({ myID: event.data.ID });
-        props.biRef.ExerciseGridSetParentName({ myName: event.data.ExerciseName });
-    }, []);
-
     function _FnRefreshGrid() {
         ShowData();
     }
-
-    props.biRef.exGridClosed = _FnRefreshGrid;
 
     useEffect(() => {
         ShowData();
@@ -112,13 +76,12 @@ export default function ExercisesGrid(props) {
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID }
-        axios.put(ExercisesURL, {
+        axios.put(SportAbilitiesURL, {
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
-                ExerciseName: saveprops.ExerciseName,
-                ExerciseDescription: saveprops.ExerciseDescription,
                 SportAbilityName: saveprops.SportAbilityName,
+                Remark: saveprops.Remark,
             }
         })
             .then((result) => {
@@ -133,10 +96,8 @@ export default function ExercisesGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            ExerciseName: "-",
-            ExerciseDescription: "-",
-            SportAbilityName: "---",
-            ResToExString: "",
+            SportAbilityName: "-",
+            Remark: "-",
         };
         return newData;
     }
@@ -160,7 +121,7 @@ export default function ExercisesGrid(props) {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "Exercises" }
+            headers: { data: deletedIds, datatable: "SportAbilities" }
         }).then(() => {
             ShowData()
         }).catch((err) => {
@@ -183,12 +144,12 @@ export default function ExercisesGrid(props) {
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
-                select: 'ID, ExerciseName, ExerciseDescription, SportAbilityName, ResToExString',
+                select: 'ID, SportAbilityName, Remark',
                 top: '500',
-                from: 'vExercises',
+                from: 'vSportAbilities',
                 where: '',
                 groupby: '',
-                orderby: 'ExerciseName',
+                orderby: 'SportAbilityName',
                 token: props.token,
             },
         })
@@ -204,11 +165,11 @@ export default function ExercisesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ExercisesGrid.js (line: 207)', err);
+                console.log('+++ SportAbilitiesGrid.js (line: 207)', err);
             });
     }
 
-    return (<div className="ExercisesGrid">
+    return (<div className="SportAbilitiesGrid">
         <div class='row'>
             <div class="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
@@ -237,7 +198,6 @@ export default function ExercisesGrid(props) {
                     animateRows={true}
                     onCellValueChanged={onCellValueChanged}
                     navigateToNextCell={navigateToNextCell}
-                    onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

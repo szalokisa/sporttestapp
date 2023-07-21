@@ -2,7 +2,12 @@ import { verify } from 'jsonwebtoken';
 
 export function verifyToken(req, res, next) {
     try {
-        const extractedToken = verify(req.headers.token, process.env.jwtSecretKey);
+        let token = req.headers.token;
+        if (!token)
+        {
+            token = req.body.headers.token;
+        }
+        const extractedToken = verify(token, process.env.jwtSecretKey);
         const currentDate = new Date();
 
         if (extractedToken.valid < currentDate.getTime()) {

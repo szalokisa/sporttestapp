@@ -68,10 +68,38 @@ async function initSportAbilityCombo(props) {
         with0: 'true',
     }
 
-    const sportAbilitiesComboData = await GridComboData(comboAbilitiesProps)
-    const unitComboData = await GridComboData(comboUnitProps)
+    const comboOrganisationsProps = {
+        token: props.token,
+        from: 'organisations_view_gridCombo',
+        select: 'FieldValue',
+        language: props.language,
+        top: '500',
+        where: '',
+        groupby: '',
+        orderby: 'FieldValue',
+        with0: 'true',
+    }
+
+    const comboGendersProps = {
+        token: props.token,
+        from: 'genders_view_gridCombo',
+        select: 'FieldValue',
+        language: props.language,
+        top: '500',
+        where: '',
+        groupby: '',
+        orderby: 'FieldValue',
+        with0: 'true',
+    }
+
+    const sportAbilitiesComboData = await GridComboData(comboAbilitiesProps);
+    const unitComboData = await GridComboData(comboUnitProps);
+    const organisationsComboData = await GridComboData(comboOrganisationsProps);
+    const gendersComboData = await GridComboData(comboGendersProps);
     props.setSportAbilitiesComboData(sportAbilitiesComboData);
     props.setUnitComboData(unitComboData);
+    props.setGendersComboData(gendersComboData);
+    props.setOrganisationsComboData(organisationsComboData);
     return sportAbilitiesComboData;
 }
 

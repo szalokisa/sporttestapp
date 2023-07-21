@@ -17,6 +17,10 @@ function ExercisesPage(props) {
         biRef.resToExSetParID(props);
     }
 
+    function PageSetParentName(props) {
+        biRef.resToExSetParName(props);
+    }
+
     function exGridClosed() {
         biRef.exGridClosed();
     }
@@ -25,6 +29,7 @@ function ExercisesPage(props) {
     var biRef = {
         ExerciseGridShowDataChildFromParent: PageShowDataChildFromParent,
         ExerciseGridSetParentID: PageSetParentID,
+        ExerciseGridSetParentName: PageSetParentName,
         exGridClosed: exGridClosed,
     }
 

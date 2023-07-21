@@ -3,8 +3,7 @@ import { db } from '../dbConnection';
 
 export async function SportAbilities_Save(queryParams) {
     const storedProcedure = new StoredProcedure('SportAbilities_Save')
-
-    storedProcedure.addParam('ID', 'int', queryParams.id);
+    storedProcedure.addParam('ID', 'int', queryParams.ID);
     storedProcedure.addParam('SportAbilityName', 'NVarChar', queryParams.SportAbilityName, { length: '250' });
     storedProcedure.addParam('Remark', 'NVarChar', queryParams.Remark, { length: 'max' });
     storedProcedure.addOutputParam('OUT_HTTP_Code', 'int');

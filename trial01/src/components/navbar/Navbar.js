@@ -26,8 +26,17 @@ export default function Navbar() {
                         <NavLink to="/exercises" onClick={closeHamMenu}>Gyakorlatok</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/proba" onClick={closeHamMenu}>Próba</NavLink>
+                        <NavLink to="/sportabilities" onClick={closeHamMenu}>Képességek</NavLink>
                     </li>
+                    <li>
+                        <NavLink to="/persons" onClick={closeHamMenu}>Sportolók</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/organisations" onClick={closeHamMenu}>Szervezetek</NavLink>
+                    </li>
+                    {/* <li>
+                        <NavLink to="/proba" onClick={closeHamMenu}>Próba</NavLink>
+                    </li> */}
                 </ul>
                 <ul className="top-level">
                     <li>

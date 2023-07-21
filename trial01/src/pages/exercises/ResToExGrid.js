@@ -11,6 +11,7 @@ export default function ResToExGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [parentID, setParentID] = useState(0);
+    const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
 
     const getRowId = useCallback(function (params) {
@@ -70,9 +71,14 @@ export default function ResToExGrid(props) {
 
     props.biRef.resToExShowDataChild = ShowDataChild;
     props.biRef.resToExSetParID = SetParID;
+    props.biRef.resToExSetParName = SetParName;
 
     function SetParID(pr) {
         setParentID(pr.myID)
+    }
+
+    function SetParName(pr) {
+        setParentName(pr.myName)
     }
 
     function closeMe() {
@@ -161,7 +167,7 @@ export default function ResToExGrid(props) {
         axios.delete(DeleteRecordURL, {
             headers: { data: deletedIds, datatable: "ResultsToExercises" }
         }).then(() => {
-            let pr = {myID: parentID};
+            let pr = { myID: parentID };
             ShowDataChild(pr)
         }).catch((err) => {
             console.error(err);
@@ -174,21 +180,25 @@ export default function ResToExGrid(props) {
     }
 
     return (<div className="ResToExGrid">
-        <h2>Várt eredmények {parentID} </h2>
-        <div className='btn-area'>
-            <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
-            <button type='button' className='btn btn-secondary' onClick={closeMe}>
-                Bezár
-            </button>
-        </div>
-        <div className={`exercisebtndel1 ${props.view}`}>
-            <button onClick={delRow1}>Kijelöltek törlése</button>
-        </div>
-        <div className={`exercisebtncancel ${props.view}`}>
-            <button onClick={delRowCancel}>Mégsem</button>
-        </div>
-        <div className={`exercisebtndel2 ${props.view}`}>
-            <button onClick={delRow2}>Törlés megerősítése</button>
+        <h2>Várt eredmények / {parentName} </h2>
+        <div className='row'>
+            <div class="col-md-4">
+                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                <button type='button' className='btn btn-close' onClick={closeMe}></button>
+            </div>
+            <div class="col-md-4">
+                <div className={`formbtndel1 ${props.view}`}>
+                    <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
+                </div>
+                <div className={`formbtncancel ${props.view}`}>
+                    <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div className={`formbtndel2 ${props.view}`}>
+                    <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
+                </div>
+            </div>
         </div>
         <div className="ag-theme-alpine-dark" style={{ width: 900, height: 300 }}>
             <AgGridReact ref={gridRef}

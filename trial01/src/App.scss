@@ -24,6 +24,8 @@ $theme-colors: (
     "info": $COLOR_FLAT_CONC,
     "success": $COLOR_FLAT_CARROT,
     "secondary": $COLOR_FLAT_MIDNIGHT,
+    "warning": $COLOR_FLAT_SUN_FLOWER,
+    "danger": $COLOR_FLAT_POMEGRANATE,
 );
 
 @import "~bootstrap/scss/bootstrap";

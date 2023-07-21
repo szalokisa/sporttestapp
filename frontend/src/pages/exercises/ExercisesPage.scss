@@ -1,31 +1,46 @@
 @import '../../App.scss';
 
 .page-exercises {
-    .form-area {
-        padding-top: 2rem;
-    }
-    
-    .form-area.GRID {
+
+    .grid2.HEAD {
         display: none;
     }
 
-    .restoexgrid-area.GRID {
-        display: none;
-    }
-    
-    .grid-area.EDIT {
+    .grid2.trash1 {
         display: none;
     }
 
-    .grid-area.RESTOEXGRID {
+    .grid1.CHILD {
+        display: none;
+    }
+  
+    .grid1.restrash1 {
         display: none;
     }
 
-    .grid-area.EDITRES {
+    .exercisebtndel2.HEAD {
         display: none;
     }
 
-    .grid-area.DUPLICATE {
+    .exercisebtndel2.CHILD {
         display: none;
     }
+
+    .exercisebtndel1.trash1 {
+        display: none;
+    }
+
+    .exercisebtndel1.restrash1 {
+        display: none;
+    }
+
+    .exercisebtncancel.HEAD {
+        display: none;
+    }
+
+    .exercisebtncancel.CHILD {
+        display: none;
+    }
+
+
 }

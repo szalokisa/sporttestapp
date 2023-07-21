@@ -15,17 +15,25 @@ const Proba = (props) => {
     };
 
     return (<main className="proba-page">
-            <button onClick={() => button0Clicked()}>DEFAULT</button>
-            <button onClick={() => button1Clicked()}>SET TO AREA 2</button>
-            <button onClick={() => button2Clicked()}>SET TO AREA 1</button>
-        <div className={`area ${view}`}>
-            proba area 2
-        </div>
-        <div className={`area1 ${view}`}>
-            proba area 1
-        </div>
-        <div className={`area2 ${view}`}>
-            proba area 2
+        <button onClick={() => button0Clicked()}>DEFAULT</button>
+        <button onClick={() => button1Clicked()}>SET TO AREA 2</button>
+        <button onClick={() => button2Clicked()}>SET TO AREA 1</button>
+        <div class="row">
+            <div class="col-md-4">
+                <div className={`area ${view}`}>
+                    proba area 2
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div className={`area1 ${view}`}>
+                    proba area 1
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div className={`area2 ${view}`}>
+                    proba area 2
+                </div>
+            </div>
         </div>
     </main>
     )
