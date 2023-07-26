@@ -92,14 +92,28 @@ async function initSportAbilityCombo(props) {
         with0: 'true',
     }
 
+    const comboExercisesProps = {
+        token: props.token,
+        from: 'exercises_view_gridCombo',
+        select: 'FieldValue',
+        language: props.language,
+        top: '500',
+        where: '',
+        groupby: '',
+        orderby: 'FieldValue',
+        with0: 'true',
+    }
+
     const sportAbilitiesComboData = await GridComboData(comboAbilitiesProps);
     const unitComboData = await GridComboData(comboUnitProps);
-    const organisationsComboData = await GridComboData(comboOrganisationsProps);
     const gendersComboData = await GridComboData(comboGendersProps);
+    const organisationsComboData = await GridComboData(comboOrganisationsProps);
+    const exercisesComboData = await GridComboData(comboExercisesProps);
     props.setSportAbilitiesComboData(sportAbilitiesComboData);
     props.setUnitComboData(unitComboData);
     props.setGendersComboData(gendersComboData);
     props.setOrganisationsComboData(organisationsComboData);
+    props.setExercisesComboData(exercisesComboData);
     return sportAbilitiesComboData;
 }
 
@@ -115,7 +129,6 @@ const Login = (props) => {
             password,
             props
         })
-        // await initClubCombo(props);
         await initSportAbilityCombo(props);
         setView("AUTH");
     }

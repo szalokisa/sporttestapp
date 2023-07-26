@@ -3,16 +3,19 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
+import saveRenderer from '../../components/renderers/saveRenderer'
+import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
-const ResToExURL = `${process.env.REACT_APP_API_BASE_URL}/exercises/restoex`;
+const TestTemplatesLineURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
-export default function ResToExGrid(props) {
+export default function TestTemplatesLineGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [parentID, setParentID] = useState(0);
     const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
+    // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
 
     const getRowId = useCallback(function (params) {
         return params.data.ID;
@@ -28,25 +31,45 @@ export default function ResToExGrid(props) {
             hide: true,
         },
         {
-            headerName: 'Leírás',
-            field: 'ResultTypeDescription',
+            field: 'Test_Template_ID',
+            hide: true,
+        },
+        {
+            field: 'ExerciseName',
+            headerName: 'Gyakorlat megnevezése',
+            cellEditor: 'agSelectCellEditor',
+            wrapText: true,
+            cellEditorParams: {
+                values: props.exercisesComboData.data
+            },
             filter: true,
             editable: true
         },
         {
-            field: 'UnitName',
-            headerName: 'Mértékegység',
-            cellEditor: 'agSelectCellEditor',
-            editable: true,
-            cellEditorParams: {
-                values: props.unitComboData.data
-            },
-
+            field: 'ExerciseDescription',
+            wrapText: true,
+            autoHeight: true,
+            headerName: 'Leírás',
+            editable: false,
+        },
+        {
+            field: 'SportAbilityName',
+            headerName: 'Képesség',
+            wrapText: true,
+            editable: false,
+        },
+        {
+            field: 'btsave',
+            width: 70,
+            resizable: false,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
         },
     ]);
 
     const defaultColDef = useMemo(() => ({
-        sortable: true
+        sortable: true,
+        resizable: true
     }));
 
     function addItem() {
@@ -63,8 +86,9 @@ export default function ResToExGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            ResultTypeDescription: "-",
-            UnitName: "---",
+            ExerciseName: "---",
+            ExerciseDescription: "-",
+            SportAbilityName: "-",
         };
         return newData;
     }
@@ -88,7 +112,7 @@ export default function ResToExGrid(props) {
     }
 
     function ShowDataChild(pr) {
-        let mywhere = `ExerciseID = ${pr.myID}`;
+        let mywhere = `Test_Template_ID = ${pr.myID}`;
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
             mode: 'cors',
@@ -97,9 +121,9 @@ export default function ResToExGrid(props) {
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
-                select: 'ID, ResultTypeDescription, UnitName, ExerciseName',
+                select: 'ID, Test_Template_ID, ExerciseName, ExerciseDescription, SportAbilityName',
                 top: '500',
-                from: 'vResToEx',
+                from: 'vTestTemplatesLine',
                 where: mywhere,
                 groupby: '',
                 orderby: 'ID',
@@ -118,25 +142,28 @@ export default function ResToExGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ResToExGrid.js (line: 116)', err);
+                console.log('+++ TestTemplatesLineGrid.js (line: 116)', err);
             });
     }
 
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID };
-
-        axios.put(ResToExURL, {
+        saveprops['Test_Template_ID'] = pID.current;
+        axios.put(TestTemplatesLineURL, {
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
-                ExerciseName: saveprops.ExerciseName,
-                ResultTypeDescription: saveprops.ResultTypeDescription,
-                UnitName: saveprops.UnitName,
-                ExerciseID: saveprops.ExerciseID,
+                Data: saveprops,
+                HeadID: parentID,
+                Identifier: 'TestTemplatesLine',
+                token: props.token,
             }
         })
             .then((result) => {
+                let pr = { myID: parentID };
+                console.log('+++ TestTemplatesLineGrid.js (line: 158)', pr);
+                ShowDataChild(pr);
                 return;
             })
             .catch((err) => {
@@ -144,17 +171,14 @@ export default function ResToExGrid(props) {
             });
     }
 
+    const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btsave') {
+            SaveData(event.data);
+        }
+    }, []);
+
     const onCellValueChanged = useCallback((event) => {
-        let dataJson;
-        try {
-            let dataJsonStr = JSON.stringify(event.data);
-            dataJson = JSON.parse(dataJsonStr);
-            dataJson['ExerciseID'] = pID.current;
-        }
-        catch (err) {
-            console.log('+++ ResToExGrid.js (line: 153)', err);
-        }
-        SaveData(dataJson);
+        // ellenorzesek
     }, []);
 
     function delRow1() {
@@ -165,7 +189,7 @@ export default function ResToExGrid(props) {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "ResultsToExercises" }
+            headers: { data: deletedIds, datatable: "TestTemplatesLine" }
         }).then(() => {
             let pr = { myID: parentID };
             ShowDataChild(pr)
@@ -179,8 +203,8 @@ export default function ResToExGrid(props) {
         props.setView("CHILD")
     }
 
-    return (<div className="ResToExGrid">
-        <h2>Várt eredmények / {parentName} </h2>
+    return (<div className="TestTemplatesLineGrid">
+        <h2>Sablon gyakorlatai / {parentName} </h2>
         <div className='row'>
             <div class="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
@@ -200,7 +224,7 @@ export default function ResToExGrid(props) {
                 </div>
             </div>
         </div>
-        <div className="ag-theme-alpine-dark" style={{ width: 900, height: 300 }}>
+        <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
             <AgGridReact ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}
@@ -208,6 +232,7 @@ export default function ResToExGrid(props) {
                 defaultColDef={defaultColDef}
                 animateRows={true}
                 onCellValueChanged={onCellValueChanged}
+                onCellClicked={cellClickedListener}
                 rowSelection='multiple'>
             </AgGridReact>
         </div>

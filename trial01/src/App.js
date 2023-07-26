@@ -9,6 +9,7 @@ import Proba from './pages/proba/proba';
 import SportAbilitiesPage from './pages/sportabilities/SportAbilitiesPage';
 import OrganisationsPage from './pages/organisations/OrganisationsPage';
 import PersonsPage from './pages/persons/PersonsPage';
+import TestTemplatesPage from './pages/testtemplates/TestTemplatesPage';
 
 function App() {
   const [language, setLanguage] = useState('hu');
@@ -17,6 +18,7 @@ function App() {
   const [gendersComboData, setGendersComboData] = useState();
   const [organisationsComboData, setOrganisationsComboData] = useState();
   const [unitComboData, setUnitComboData] = useState();
+  const [exercisesComboData, setExercisesComboData] = useState();
 
   return (
     <div className="App">
@@ -43,6 +45,7 @@ function App() {
                 setUnitComboData={setUnitComboData}
                 setOrganisationsComboData={setOrganisationsComboData}
                 setGendersComboData={setGendersComboData}
+                setExercisesComboData={setExercisesComboData}
               />
             } />
             <Route path="/logout" element={
@@ -77,7 +80,7 @@ function App() {
                 gendersComboData={gendersComboData}
                 organisationsComboData={organisationsComboData}
                 unitComboData={unitComboData}
-              />
+                />
             } />
             <Route path="/organisations" element={
               <OrganisationsPage
@@ -85,6 +88,14 @@ function App() {
                 setToken={setToken}
                 token={token}
               />
+            } />
+            <Route path="/testtemplates" element={
+              <TestTemplatesPage
+                language={language}
+                setToken={setToken}
+                exercisesComboData={exercisesComboData}
+                token={token}
+                />
             } />
             <Route path="/proba" element={
               <Proba

@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { useState } from "react";
 import TitleBar from "../../components/titleBar/TitleBar";
-import ExercisesGrid from "./ExercisesGrid";
-import ResToExGrid from "./ResToExGrid";
-import './ExercisesPage.scss';
+import TestTemplatesGrid from "./TestTemplatesGrid";
+import TestTemplatesLineGrid from "./TestTemplatesLineGrid";
+import './TestTemplatesPage.scss';
 
-function ExercisesPage(props) {
+function TestTemplatesPage(props) {
     const [view, setView] = useState('HEAD');
     const [refreshId, setRefreshId] = useState(0);
 
@@ -37,11 +37,11 @@ function ExercisesPage(props) {
         setView('RESTOEXGRID');
     }
 
-    return <main className="page-exercises">
-        <TitleBar title='Gyakoraltok' />
+    return <main className="page-testtemplates">
+        <TitleBar title='Teszt sablonok' />
         {
             <div className={`grid1 ${view}`}>
-                <ExercisesGrid
+                <TestTemplatesGrid
                     language={props.language}
                     biRef={biRef}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
@@ -54,13 +54,13 @@ function ExercisesPage(props) {
         }
         {
             <div className={`grid2 ${view}`}>
-                <ResToExGrid
+                <TestTemplatesLineGrid
                     view={view}
                     biRef={biRef}
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     token={props.token}
-                    unitComboData={props.unitComboData}
+                    exercisesComboData={props.exercisesComboData}
                     onCancel={editResToExCancelled}
                     refreshId={refreshId}
                     setRefreshId={setRefreshId}
@@ -71,4 +71,4 @@ function ExercisesPage(props) {
         }
     </main>
 }
-export default ExercisesPage;
+export default TestTemplatesPage;

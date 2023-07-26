@@ -6,12 +6,13 @@ export default (props) => {
 
     const buttonClicked = () => {
         console.log('+++ saveRenderer.js (line: 8)', props);
+        // props.saveData(props.data);
     };
 
     return (
         <span>
             <span>{cellValue}</span>&nbsp;
-            <button onClick={() => buttonClicked()}>Adat mentése</button>
+            <button onClick={() => buttonClicked()}>...</button>
         </span>
     );
 };

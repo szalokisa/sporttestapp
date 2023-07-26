@@ -3,11 +3,12 @@ import { Save_Data } from "../db/storedProcedures";
 
 export const dataService = {
     async getData(queryParams) {
+        console.log('+++ dataService.js (line: 6)', queryParams);
         return await EComm_DATA_GET(queryParams);
     },
-    
+
     async saveData(queryParams) {
-        console.log('+++ dataService.js (line: 10)',queryParams);
+        console.log('+++ dataService.js (line: 10)', queryParams);
         return await Save_Data(queryParams);
     },
 

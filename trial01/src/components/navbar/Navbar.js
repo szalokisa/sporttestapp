@@ -34,6 +34,9 @@ export default function Navbar() {
                     <li>
                         <NavLink to="/organisations" onClick={closeHamMenu}>Szervezetek</NavLink>
                     </li>
+                    <li>
+                        <NavLink to="/testtemplates" onClick={closeHamMenu}>Teszt sablonok</NavLink>
+                    </li>
                     {/* <li>
                         <NavLink to="/proba" onClick={closeHamMenu}>Próba</NavLink>
                     </li> */}

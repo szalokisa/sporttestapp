@@ -39,6 +39,7 @@ export const dataController = {
     },
 
     async saveData(req, res, next) {
+        console.log('+++ dataController.js (line: 42)', req.body);
         let result;
         try {
             result = await dataService.saveData(req.body.headers);
