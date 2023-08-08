@@ -9,7 +9,6 @@ export async function Save_Data(queryParams) {
     storedProcedure.addOutputParam('OUT_HTTP_Code', 'int');
     storedProcedure.addOutputParam('OUT_HTTP_Message', 'NVarChar', '', { length: 'max' });
     const sqlResult = await db.callSP(storedProcedure);
-    console.log('+++ Save_Data.js (line: 11)',sqlResult.output);
     if (sqlResult.output.OUT_HTTP_Code !== 200) {
         const error = new Error(sqlResult.output.OUT_HTTP_Message);
         error.status = sqlResult.output.OUT_HTTP_Code;

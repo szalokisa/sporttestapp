@@ -10,6 +10,7 @@ import SportAbilitiesPage from './pages/sportabilities/SportAbilitiesPage';
 import OrganisationsPage from './pages/organisations/OrganisationsPage';
 import PersonsPage from './pages/persons/PersonsPage';
 import TestTemplatesPage from './pages/testtemplates/TestTemplatesPage';
+import TestPage from './pages/tests/TestPage';
 
 function App() {
   const [language, setLanguage] = useState('hu');
@@ -19,6 +20,8 @@ function App() {
   const [organisationsComboData, setOrganisationsComboData] = useState();
   const [unitComboData, setUnitComboData] = useState();
   const [exercisesComboData, setExercisesComboData] = useState();
+  const [personsComboData, setpersonsComboData] = useState();
+  const [testTemplatesComboData, settestTemplatesComboData] = useState();
 
   return (
     <div className="App">
@@ -46,6 +49,8 @@ function App() {
                 setOrganisationsComboData={setOrganisationsComboData}
                 setGendersComboData={setGendersComboData}
                 setExercisesComboData={setExercisesComboData}
+                setpersonsComboData={setpersonsComboData}
+                settestTemplatesComboData={settestTemplatesComboData}
               />
             } />
             <Route path="/logout" element={
@@ -94,6 +99,15 @@ function App() {
                 language={language}
                 setToken={setToken}
                 exercisesComboData={exercisesComboData}
+                token={token}
+                />
+            } />
+            <Route path="/tests" element={
+              <TestPage
+                language={language}
+                setToken={setToken}
+                personsComboData={personsComboData}
+                testTemplatesComboData={testTemplatesComboData}
                 token={token}
                 />
             } />

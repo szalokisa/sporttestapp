@@ -1,4 +1,5 @@
 import React from 'react';
+import pencilIcon from "../icons/pencil.svg"
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
@@ -6,13 +7,18 @@ export default (props) => {
 
     const buttonClicked = () => {
         console.log('+++ saveRenderer.js (line: 8)', props);
-        // props.saveData(props.data);
     };
 
     return (
         <span>
             <span>{cellValue}</span>&nbsp;
-            <button onClick={() => buttonClicked()}>...</button>
+            <img
+                className='pencilIcon'
+                src={pencilIcon}
+                onClick={() => buttonClicked()}
+                alt="pencil"
+            />
+
         </span>
     );
 };

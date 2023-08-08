@@ -104,16 +104,45 @@ async function initSportAbilityCombo(props) {
         with0: 'true',
     }
 
+    const comboPersonsProps = {
+        token: props.token,
+        from: 'persons_view_gridCombo',
+        select: 'FieldValue',
+        language: props.language,
+        top: '500',
+        where: '',
+        groupby: '',
+        orderby: 'FieldValue',
+        with0: 'true',
+    }
+
+    const combotestTemplatesProps = {
+        token: props.token,
+        from: 'templates_view_gridCombo',
+        select: 'FieldValue',
+        language: props.language,
+        top: '500',
+        where: '',
+        groupby: '',
+        orderby: 'FieldValue',
+        with0: 'true',
+    }
+
     const sportAbilitiesComboData = await GridComboData(comboAbilitiesProps);
     const unitComboData = await GridComboData(comboUnitProps);
     const gendersComboData = await GridComboData(comboGendersProps);
     const organisationsComboData = await GridComboData(comboOrganisationsProps);
     const exercisesComboData = await GridComboData(comboExercisesProps);
+    const personsComboData = await GridComboData(comboPersonsProps);
+    const testTemplatesComboData = await GridComboData(combotestTemplatesProps);
+
     props.setSportAbilitiesComboData(sportAbilitiesComboData);
     props.setUnitComboData(unitComboData);
     props.setGendersComboData(gendersComboData);
     props.setOrganisationsComboData(organisationsComboData);
     props.setExercisesComboData(exercisesComboData);
+    props.setpersonsComboData(personsComboData);
+    props.settestTemplatesComboData(testTemplatesComboData);
     return sportAbilitiesComboData;
 }
 

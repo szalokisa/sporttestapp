@@ -10,7 +10,7 @@ const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 const rowheight = 75;
 
-export default function TestTemplatesGrid(props) {
+export default function TestGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
@@ -24,39 +24,64 @@ export default function TestTemplatesGrid(props) {
             hide: true
         },
         {
-            field: 'TestTemplatesName',
-            headerName: 'Megnevezés',
+            field: 'DT',
+            headerName: 'Időpont',
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
             filter: true,
             editable: true
         },
         {
-            field: 'TestTemplatesDescription',
-            headerName: 'Leírás',
-            cellEditor: 'agLargeTextCellEditor',
-            width: 350,
-            cellEditorPopup: true,
+            field: 'PLACE',
+            headerName: 'Helyszín',
+            cellEditor: 'agTextCellEditor',
+            width: 250,
+            cellEditorPopup: false,
             wrapText: true,
             autoHeight: true,
             filter: true,
             editable: true
         },
         {
-            field: 'LineString',
-            headerName: 'Gyakorlatok',
+            field: 'REMARK',
+            headerName: 'Megjegyzés',
             width: 350,
             wrapText: true,
             autoHeight: true,
             filter: true,
-            editable: false
+            editable: true
         },
         {
-            field: 'btsave',
-            width: 70,
-            headerName: 'save',
-            // resizable: false,
-            cellRenderer: saveRenderer,
+            field: 'TestTemplatesName',
+            headerName: 'Teszt sablon',
+            cellEditor: 'agSelectCellEditor',
+            cellEditorParams: {
+                values: props.testTemplatesComboData.data
+            },
+            cellEditorPopup: false,
+            filter: true,
+            editable: true
+        },
+        {
+            field: 'TestTemplatesDescription',
+            headerName: 'Sablon leírás',
+            width: 350,
+            wrapText: true,
+            autoHeight: true,
+            filter: true,
+            editable: false,
+            hide: true,
+        },
+        {
+            field: 'Persons_Count',
+            headerName: 'Sportolók',
+            cellEditor: 'agTextCellEditor',
+            width: 100,
+            cellEditorPopup: false,
+            wrapText: true,
+            autoHeight: true,
+            filter: false,
+            editable: false
         },
         {
             field: 'btnopen',
@@ -65,9 +90,37 @@ export default function TestTemplatesGrid(props) {
             resizable: false,
             cellRenderer: openRenderer,
             cellRendererParams: {
-                form: 'TestTemplates',
+                form: 'Test',
                 setView: props.setView
             }
+        },
+        {
+            field: 'Tests_Count',
+            headerName: 'Mérések',
+            cellEditor: 'agTextCellEditor',
+            width: 100,
+            cellEditorPopup: false,
+            wrapText: true,
+            autoHeight: true,
+            filter: false,
+            editable: false
+        },
+        {
+            field: 'FillingPercent',
+            headerName: ' % ',
+            cellEditor: 'agTextCellEditor',
+            width: 100,
+            cellEditorPopup: false,
+            wrapText: true,
+            autoHeight: true,
+            filter: false,
+            editable: false
+        },
+        {
+            field: 'btsave',
+            width: 70,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
         },
     ]);
 
@@ -80,7 +133,7 @@ export default function TestTemplatesGrid(props) {
     const cellClickedListener = useCallback(event => {
         props.biRef.HeadGridShowDataChildFromParent({ myID: event.data.ID });
         props.biRef.HeadGridSetParentID({ myID: event.data.ID });
-        props.biRef.HeadGridSetParentName({ myName: event.data.TestTemplatesName });
+        // props.biRef.HeadGridSetParentName({ myName: event.data.TestName });
         if (event.colDef.field === 'btsave') {
             SaveData(event.data);
         }
@@ -96,22 +149,6 @@ export default function TestTemplatesGrid(props) {
         ShowData();
     }, []);
 
-    const navigateToNextCell = useCallback((params) => {
-        var suggestedNextCell = params.nextCellPosition;
-        var KEY_UP = 'ArrowUp';
-        var KEY_DOWN = 'ArrowDown';
-        var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
-        if (noUpOrDownKeyPressed || !suggestedNextCell) {
-            return suggestedNextCell;
-        }
-        gridRef.current.api.forEachNode(function (node) {
-            if (node.rowIndex === suggestedNextCell.rowIndex) {
-                node.setSelected(true);
-            }
-        });
-        return suggestedNextCell;
-    }, []);
-
     const onCellValueChanged = useCallback((event) => {
         // SaveData(event.data);
     }, []);
@@ -124,7 +161,7 @@ export default function TestTemplatesGrid(props) {
                 'Content-Type': 'application/json',
                 ID: recID,
                 Data: saveprops,
-                Identifier: 'TestTemplates',
+                Identifier: 'STT_HEAD',
                 token: props.token,
             }
         })
@@ -140,8 +177,14 @@ export default function TestTemplatesGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            TestTemplatesName: "-",
-            TestTemplateDescription: "-",
+            DT: "",
+            PLACE: "---",
+            REMARK: "---",
+            TestTemplatesName: "---",
+            TestTemplatesDescription: "---",
+            Persons_Count: "0",
+            Tests_Count: "0",
+            FillingPercent: "0",
         };
         return newData;
     }
@@ -165,7 +208,7 @@ export default function TestTemplatesGrid(props) {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "TestTemplates" }
+            headers: { data: deletedIds, datatable: "Test" }
         }).then(() => {
             ShowData()
         }).catch((err) => {
@@ -188,12 +231,12 @@ export default function TestTemplatesGrid(props) {
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
-                select: 'ID, TestTemplatesName, TestTemplatesDescription, LineString',
+                select: 'ID, DT, PLACE, REMARK, TestTemplatesName, TestTemplatesDescription, Persons_Count, Tests_Count, FillingPercent',
                 top: '500',
-                from: 'vTestTemplates',
+                from: 'vTest',
                 where: '',
                 groupby: '',
-                orderby: 'TestTemplatesName',
+                orderby: 'DT',
                 token: props.token,
             },
         })
@@ -209,11 +252,11 @@ export default function TestTemplatesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ TestTemplatesGrid.js (line: 207)', err);
+                console.log('+++ TestGrid.js (line: 207)', err);
             });
     }
 
-    return (<div className="TestTemplatesGrid">
+    return (<div className="TestGrid">
         <div class='row'>
             <div class="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
@@ -241,7 +284,6 @@ export default function TestTemplatesGrid(props) {
                     defaultColDef={defaultColDef}
                     animateRows={true}
                     onCellValueChanged={onCellValueChanged}
-                    // navigateToNextCell={navigateToNextCell}
                     onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
