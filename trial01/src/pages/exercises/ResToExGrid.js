@@ -118,7 +118,7 @@ export default function ResToExGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ResToExGrid.js (line: 116)', err);
+                console.log('ResToExGrid.js (line: 121)', err);
             });
     }
 
@@ -152,13 +152,13 @@ export default function ResToExGrid(props) {
             dataJson['ExerciseID'] = pID.current;
         }
         catch (err) {
-            console.log('+++ ResToExGrid.js (line: 153)', err);
+            console.log('ResToExGrid.js (line: 153)', err);
         }
         SaveData(dataJson);
     }, []);
 
     function delRow1() {
-        props.setView("restrash1")
+        props.setView("childtrash1")
     }
 
     function delRow2() {

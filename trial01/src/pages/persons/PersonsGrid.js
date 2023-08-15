@@ -2,11 +2,8 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
+import saveRenderer from '../../components/renderers/saveRenderer';
 import axios from 'axios';
-// import { AgGridReact } from '@ag-grid-community/react';
-// import { ModuleRegistry } from '@ag-grid-community/core';
-// import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-
 
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
@@ -68,11 +65,18 @@ export default function PersonsGrid(props) {
             filter: true,
             editable: true
         },
+        {
+            field: 'btsave',
+            width: 70,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
+        },
     ]);
 
     // DefaultColDef sets props common to all Columns
     const defaultColDef = useMemo(() => ({
-        sortable: true
+        sortable: true,
+        resizable: true,
     }));
 
     useEffect(() => {
@@ -95,8 +99,10 @@ export default function PersonsGrid(props) {
         return suggestedNextCell;
     }, []);
 
-    const onCellValueChanged = useCallback((event) => {
-        SaveData(event.data);
+    const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btsave') {
+            SaveData(event.data);
+        }
     }, []);
 
     async function SaveData(saveprops) {
@@ -196,7 +202,7 @@ export default function PersonsGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ PersonsGrid.js (line: 207)', err);
+                console.log('PersonsGrid.js (line: 207)', err);
             });
     }
 
@@ -227,8 +233,8 @@ export default function PersonsGrid(props) {
                     getRowId={getRowId}
                     defaultColDef={defaultColDef}
                     animateRows={true}
-                    onCellValueChanged={onCellValueChanged}
                     navigateToNextCell={navigateToNextCell}
+                    onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

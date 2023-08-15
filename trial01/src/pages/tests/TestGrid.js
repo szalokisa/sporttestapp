@@ -35,17 +35,8 @@ export default function TestGrid(props) {
             field: 'PLACE',
             headerName: 'Helyszín',
             cellEditor: 'agTextCellEditor',
-            width: 250,
+            width: 150,
             cellEditorPopup: false,
-            wrapText: true,
-            autoHeight: true,
-            filter: true,
-            editable: true
-        },
-        {
-            field: 'REMARK',
-            headerName: 'Megjegyzés',
-            width: 350,
             wrapText: true,
             autoHeight: true,
             filter: true,
@@ -90,7 +81,7 @@ export default function TestGrid(props) {
             resizable: false,
             cellRenderer: openRenderer,
             cellRendererParams: {
-                form: 'Test',
+                form: 'Child1',
                 setView: props.setView
             }
         },
@@ -106,6 +97,17 @@ export default function TestGrid(props) {
             editable: false
         },
         {
+            field: 'btnopen2',
+            width: 70,
+            headerName: '-->',
+            resizable: false,
+            cellRenderer: openRenderer,
+            cellRendererParams: {
+                form: 'Child2',
+                setView: props.setView
+            }
+        },
+        {
             field: 'FillingPercent',
             headerName: ' % ',
             cellEditor: 'agTextCellEditor',
@@ -115,6 +117,15 @@ export default function TestGrid(props) {
             autoHeight: true,
             filter: false,
             editable: false
+        },
+        {
+            field: 'REMARK',
+            headerName: 'Megjegyzés',
+            width: 200,
+            wrapText: true,
+            autoHeight: true,
+            filter: true,
+            editable: true
         },
         {
             field: 'btsave',
@@ -252,7 +263,7 @@ export default function TestGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ TestGrid.js (line: 207)', err);
+                console.log('TestGrid.js (line: 207)', err);
             });
     }
 

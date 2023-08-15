@@ -13,7 +13,7 @@ export default function TestPersonsGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [parentID, setParentID] = useState(0);
-    const [parentName, setParentName] = useState(0);
+    // const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
     // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
 
@@ -87,17 +87,17 @@ export default function TestPersonsGrid(props) {
         return newData;
     }
 
-    props.biRef.childShowDataChild = ShowDataChild;
-    props.biRef.childSetParID = SetParID;
-    props.biRef.childSetParName = SetParName;
+    props.biRef.child1ShowDataChild = ShowDataChild;
+    props.biRef.child1SetParID = SetParID;
+    // props.biRef.childSetParName = SetParName;
 
     function SetParID(pr) {
         setParentID(pr.myID)
     }
 
-    function SetParName(pr) {
-        setParentName(pr.myName)
-    }
+    // function SetParName(pr) {
+    //     setParentName(pr.myName)
+    // }
 
     function closeMe() {
         props.setView("HEAD");
@@ -136,7 +136,7 @@ export default function TestPersonsGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ TestPersonsGrid.js (line: 116)', err);
+                console.log('TestPersonsGrid.js (line: 140)', err);
             });
     }
 
@@ -155,8 +155,7 @@ export default function TestPersonsGrid(props) {
             }
         })
             .then((result) => {
-                let pr = { myID: parentID };
-                console.log('+++ TestPersonsGrid.js (line: 158)', pr);
+                let pr = { myID: result.data.data[0].STT_HEAD_ID };
                 ShowDataChild(pr);
                 return;
             })
@@ -176,13 +175,12 @@ export default function TestPersonsGrid(props) {
     }, []);
 
     function delRow1() {
-        props.setView("restrash1")
+        props.setView("childtrash1")
     }
 
     function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
-        console.log('+++ TestPersonsGrid.js (line: 185)',deletedIds);
         axios.delete(DeleteRecordURL, {
             headers: { data: deletedIds, datatable: "STT_PERSONS" }
         }).then(() => {
@@ -199,7 +197,7 @@ export default function TestPersonsGrid(props) {
     }
 
     return (<div className="TestPersonsGrid">
-        <h2>Sportolók / {parentName} </h2>
+        <h2>Sportolók / {parentID} </h2>
         <div className='row'>
             <div class="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>

@@ -62,7 +62,7 @@ export default function ExercisesGrid(props) {
             headerName: '...',
             cellRenderer: openRenderer,
             cellRendererParams: {
-                form: 'Exercises',
+                form: 'Child1',
                 setView: props.setView
             }
         },
@@ -204,7 +204,7 @@ export default function ExercisesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ ExercisesGrid.js (line: 207)', err);
+                console.log('ExercisesGrid.js (line: 207)', err);
             });
     }
 

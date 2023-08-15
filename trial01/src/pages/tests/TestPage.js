@@ -3,6 +3,7 @@ import { useState } from "react";
 import TitleBar from "../../components/titleBar/TitleBar";
 import TestGrid from "./TestGrid";
 import TestPersonsGrid from "./TestPersonsGrid";
+import TestLinesGrid from "./TestLineGrid";
 import './TestPage.scss';
 
 function TestPage(props) {
@@ -10,15 +11,18 @@ function TestPage(props) {
     const [refreshId, setRefreshId] = useState(0);
 
     function PageShowDataChildFromParent(props) {
-        biRef.childShowDataChild(props);
+        biRef.child1ShowDataChild(props);
+        biRef.child2ShowDataChild(props);
     }
 
     function PageSetParentID(props) {
-        biRef.childSetParID(props);
+        biRef.child1SetParID(props);
+        biRef.child2SetParID(props);
     }
 
     function PageSetParentName(props) {
-        biRef.childSetParName(props);
+        biRef.child1SetParName(props);
+        biRef.child2SetParName(props);
     }
 
     function childGridClosed() {
@@ -61,6 +65,23 @@ function TestPage(props) {
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     token={props.token}
                     personsComboData={props.personsComboData}
+                    onCancel={editChild1Cancelled}
+                    refreshId={refreshId}
+                    setRefreshId={setRefreshId}
+                    setView={setView}
+                    childGridClosed={childGridClosed}
+                />
+            </div>
+        }
+        {
+            <div className={`grid3 ${view}`}>
+                <TestLinesGrid
+                    view={view}
+                    biRef={biRef}
+                    language={props.language}
+                    dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
+                    token={props.token}
+                    // personsComboData={props.personsComboData}
                     onCancel={editChild1Cancelled}
                     refreshId={refreshId}
                     setRefreshId={setRefreshId}

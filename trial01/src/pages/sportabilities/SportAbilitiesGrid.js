@@ -165,7 +165,7 @@ export default function SportabilitiesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ SportAbilitiesGrid.js (line: 207)', err);
+                console.log('SportAbilitiesGrid.js (line: 207)', err);
             });
     }
 

@@ -4,12 +4,12 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
 import saveRenderer from '../../components/renderers/saveRenderer'
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
+// import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
-const TestTemplatesLineURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
+const TestLinesURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
-export default function TestTemplatesLineGrid(props) {
+export default function TestLinesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [parentID, setParentID] = useState(0);
@@ -31,32 +31,54 @@ export default function TestTemplatesLineGrid(props) {
             hide: true,
         },
         {
-            field: 'Test_Template_ID',
+            field: 'STT_HEAD_ID',
             hide: true,
         },
         {
-            field: 'ExerciseName',
-            headerName: 'Gyakorlat megnevezése',
-            cellEditor: 'agSelectCellEditor',
-            wrapText: true,
-            cellEditorParams: {
-                values: props.exercisesComboData.data
-            },
+            field: 'PersonName',
+            headerName: 'Sportoló',
             filter: true,
-            editable: true
-        },
-        {
-            field: 'ExerciseDescription',
-            wrapText: true,
-            autoHeight: true,
-            headerName: 'Leírás',
-            editable: false,
+            editable: false
         },
         {
             field: 'SportAbilityName',
             headerName: 'Képesség',
-            wrapText: true,
-            editable: false,
+            filter: true,
+            editable: false
+        },
+        {
+            field: 'ExerciseName',
+            headerName: 'Gyakorlat',
+            filter: true,
+            editable: false
+        },
+        {
+            field: 'ResultTypeDescription',
+            headerName: 'Mit mérünk',
+            filter: true,
+            editable: false
+        },
+        {
+            field: 'RESULT',
+            headerName: 'Mért eredmény',
+            cellEditor: 'agTextCellEditor',
+            cellEditorPopup: false,
+            filter: true,
+            editable: true
+        },
+        {
+            field: 'UnitName',
+            headerName: 'egység',
+            filter: true,
+            editable: false
+        },
+        {
+            field: 'REMARK',
+            headerName: 'Megjegyzés',
+            cellEditor: 'agTextCellEditor',
+            cellEditorPopup: false,
+            filter: true,
+            editable: true
         },
         {
             field: 'btsave',
@@ -86,24 +108,29 @@ export default function TestTemplatesLineGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            ExerciseName: "---",
-            ExerciseDescription: "-",
-            SportAbilityName: "-",
+            STT_HEAD_ID: 0,
+            PersonName: '---',
+            SportAbilityName: '---',
+            ExerciseName: '---',
+            ResultTypeDescription: '---',
+            RESULT: '---',
+            UnitName: '---',
+            REMARK: '---',
         };
         return newData;
     }
 
-    props.biRef.childShowDataChild = ShowDataChild;
-    props.biRef.childSetParID = SetParID;
-    props.biRef.childSetParName = SetParName;
+    props.biRef.child2ShowDataChild = ShowDataChild;
+    props.biRef.child2SetParID = SetParID;
+    // props.biRef.childSetParName = SetParName;
 
     function SetParID(pr) {
         setParentID(pr.myID)
     }
 
-    function SetParName(pr) {
-        setParentName(pr.myName)
-    }
+    // function SetParName(pr) {
+    //     setParentName(pr.myName)
+    // }
 
     function closeMe() {
         props.setView("HEAD");
@@ -112,7 +139,7 @@ export default function TestTemplatesLineGrid(props) {
     }
 
     function ShowDataChild(pr) {
-        let mywhere = `Test_Template_ID = ${pr.myID}`;
+        let mywhere = `STT_HEAD_ID = ${pr.myID}`;
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
             mode: 'cors',
@@ -121,9 +148,9 @@ export default function TestTemplatesLineGrid(props) {
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
-                select: 'ID, Test_Template_ID, ExerciseName, ExerciseDescription, SportAbilityName',
+                select: 'ID, STT_HEAD_ID, PersonName, SportAbilityName, ExerciseName, ResultTypeDescription, RESULT, UnitName, REMARK',
                 top: '500',
-                from: 'vTestTemplatesLine',
+                from: 'vTestLines',
                 where: mywhere,
                 groupby: '',
                 orderby: 'ID',
@@ -142,26 +169,26 @@ export default function TestTemplatesLineGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('TestTemplatesLineGrid.js (line: 145)', err);
+                console.log('TestLinesGrid.js (line: 173)', err);
             });
     }
 
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID };
-        saveprops['Test_Template_ID'] = pID.current;
-        axios.put(TestTemplatesLineURL, {
+        saveprops['STT_HEAD_ID'] = pID.current;
+        axios.put(TestLinesURL, {
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
                 Data: saveprops,
                 HeadID: parentID,
-                Identifier: 'TestTemplatesLine',
+                Identifier: 'STT_LINE',
                 token: props.token,
             }
         })
             .then((result) => {
-                let pr = { myID: result.data.data[0].Test_Template_ID };
+                let pr = { myID: parentID };
                 ShowDataChild(pr);
                 return;
             })
@@ -181,32 +208,32 @@ export default function TestTemplatesLineGrid(props) {
     }, []);
 
     function delRow1() {
-        props.setView("childtrash1")
+        props.setView("child2trash1")
     }
 
     function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "TestTemplatesLine" }
+            headers: { data: deletedIds, datatable: "STT_LINE" }
         }).then(() => {
             let pr = { myID: parentID };
             ShowDataChild(pr)
         }).catch((err) => {
             console.error(err);
         })
-        props.setView("CHILD")
+        props.setView("CHILD2")
     }
 
     function delRowCancel() {
-        props.setView("CHILD")
+        props.setView("CHILD2")
     }
 
-    return (<div className="TestTemplatesLineGrid">
-        <h2>Sablon gyakorlatai / {parentName} </h2>
+    return (<div className="TestLinesGrid">
+        <h2>Mért eredmények / {parentID} </h2>
         <div className='row'>
             <div class="col-md-4">
-                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Mérési adatok felvétele</button>
                 <button type='button' className='btn btn-close' onClick={closeMe}></button>
             </div>
             <div class="col-md-4">

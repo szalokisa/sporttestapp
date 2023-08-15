@@ -5,7 +5,12 @@ export default (props) => {
     const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
 
     const buttonClicked = () => {
-        props.setView('CHILD');
+        if (props.form === 'Child1') {
+            props.setView('CHILD');
+        }
+        if (props.form === 'Child2') {
+            props.setView('CHILD2');
+        }
     };
 
     return (

@@ -74,7 +74,6 @@ export default function OrganisationsGrid(props) {
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID }
-        console.log('+++ OrganisationsGrid.js (line: 76)', saveprops, props.token);
         axios.put(DataURL, {
             headers: {
                 'Content-Type': 'application/json',
@@ -165,7 +164,7 @@ export default function OrganisationsGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ OrganisationsGrid.js (line: 207)', err);
+                console.log('OrganisationsGrid.js (line: 207)', err);
             });
     }
 

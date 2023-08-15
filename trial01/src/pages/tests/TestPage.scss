@@ -6,7 +6,15 @@
         display: none;
     }
 
+    .grid3.HEAD {
+        display: none;
+    }
+
     .grid2.trash1 {
+        display: none;
+    }
+
+    .grid3.trash1 {
         display: none;
     }
 
@@ -14,7 +22,31 @@
         display: none;
     }
   
-    .grid1.restrash1 {
+    .grid1.CHILD2 {
+        display: none;
+    }
+  
+    .grid2.CHILD2 {
+        display: none;
+    }
+  
+    .grid3.CHILD {
+        display: none;
+    }
+  
+    .grid1.childtrash1 {
+        display: none;
+    }
+
+    .grid1.child2trash1 {
+        display: none;
+    }
+
+    .grid2.child2trash1 {
+        display: none;
+    }
+
+    .grid3.childtrash1 {
         display: none;
     }
 
@@ -26,11 +58,19 @@
         display: none;
     }
 
+    .formbtndel2.CHILD2 {
+        display: none;
+    }
+
     .formbtndel1.trash1 {
         display: none;
     }
 
-    .formbtndel1.restrash1 {
+    .formbtndel1.childtrash1 {
+        display: none;
+    }
+
+    .formbtndel1.child2trash1 {
         display: none;
     }
 
@@ -39,6 +79,10 @@
     }
 
     .formbtncancel.CHILD {
+        display: none;
+    }
+
+    .formbtncancel.CHILD2 {
         display: none;
     }
 

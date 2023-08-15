@@ -8,7 +8,6 @@ import axios from 'axios';
 
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
-const rowheight = 75;
 
 export default function TestTemplatesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -55,7 +54,6 @@ export default function TestTemplatesGrid(props) {
             field: 'btsave',
             width: 70,
             headerName: 'save',
-            // resizable: false,
             cellRenderer: saveRenderer,
         },
         {
@@ -65,7 +63,7 @@ export default function TestTemplatesGrid(props) {
             resizable: false,
             cellRenderer: openRenderer,
             cellRendererParams: {
-                form: 'TestTemplates',
+                form: 'Child1',
                 setView: props.setView
             }
         },
@@ -76,6 +74,10 @@ export default function TestTemplatesGrid(props) {
         sortable: true,
         resizable: true,
     }));
+
+    useEffect(() => {
+        ShowData();
+    }, []);
 
     const cellClickedListener = useCallback(event => {
         props.biRef.HeadGridShowDataChildFromParent({ myID: event.data.ID });
@@ -91,26 +93,6 @@ export default function TestTemplatesGrid(props) {
     }
 
     props.biRef.childGridClosed = _FnRefreshGrid;
-
-    useEffect(() => {
-        ShowData();
-    }, []);
-
-    const navigateToNextCell = useCallback((params) => {
-        var suggestedNextCell = params.nextCellPosition;
-        var KEY_UP = 'ArrowUp';
-        var KEY_DOWN = 'ArrowDown';
-        var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
-        if (noUpOrDownKeyPressed || !suggestedNextCell) {
-            return suggestedNextCell;
-        }
-        gridRef.current.api.forEachNode(function (node) {
-            if (node.rowIndex === suggestedNextCell.rowIndex) {
-                node.setSelected(true);
-            }
-        });
-        return suggestedNextCell;
-    }, []);
 
     const onCellValueChanged = useCallback((event) => {
         // SaveData(event.data);
@@ -209,7 +191,7 @@ export default function TestTemplatesGrid(props) {
                 setRowData(jsonData.data);
             })
             .catch((err) => {
-                console.log('+++ TestTemplatesGrid.js (line: 207)', err);
+                console.log('TestTemplatesGrid.js (line: 207)', err);
             });
     }
 
@@ -241,7 +223,6 @@ export default function TestTemplatesGrid(props) {
                     defaultColDef={defaultColDef}
                     animateRows={true}
                     onCellValueChanged={onCellValueChanged}
-                    // navigateToNextCell={navigateToNextCell}
                     onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
