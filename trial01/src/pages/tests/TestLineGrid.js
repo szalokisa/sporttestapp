@@ -8,6 +8,7 @@ import saveRenderer from '../../components/renderers/saveRenderer'
 
 const TestLinesURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
+const SttLinesToHeadURL = `${process.env.REACT_APP_API_BASE_URL}/sttlinestohead`;
 
 export default function TestLinesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -80,13 +81,13 @@ export default function TestLinesGrid(props) {
             filter: true,
             editable: true
         },
-        {
-            field: 'btsave',
-            width: 70,
-            resizable: false,
-            headerName: 'save',
-            cellRenderer: saveRenderer,
-        },
+        // {
+        //     field: 'btaddlines',
+        //     width: 70,
+        //     resizable: false,
+        //     headerName: 'save',
+        //     cellRenderer: saveRenderer,
+        // },
     ]);
 
     const defaultColDef = useMemo(() => ({
@@ -95,14 +96,7 @@ export default function TestLinesGrid(props) {
     }));
 
     function addItem() {
-        const newItems = [
-            createNewRowData(),
-        ];
-        const res = gridRef.current.api.applyTransaction({
-            add: newItems,
-            addIndex: 0,
-        });
-        return res;
+        AddLines();
     };
 
     function createNewRowData() {
@@ -153,7 +147,7 @@ export default function TestLinesGrid(props) {
                 from: 'vTestLines',
                 where: mywhere,
                 groupby: '',
-                orderby: 'ID',
+                orderby: 'PersonName',
                 token: props.token,
             },
         })
@@ -173,6 +167,10 @@ export default function TestLinesGrid(props) {
             });
     }
 
+    const onCellValueChanged = useCallback((event) => {
+        SaveData(event.data);
+    }, []);
+
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID };
@@ -183,12 +181,12 @@ export default function TestLinesGrid(props) {
                 ID: recID,
                 Data: saveprops,
                 HeadID: parentID,
-                Identifier: 'STT_LINE',
+                Identifier: 'STT_LINES',
                 token: props.token,
             }
         })
             .then((result) => {
-                let pr = { myID: parentID };
+                let pr = { myID: result.data.data[0].STT_HEAD_ID };
                 ShowDataChild(pr);
                 return;
             })
@@ -197,15 +195,30 @@ export default function TestLinesGrid(props) {
             });
     }
 
-    const cellClickedListener = useCallback(event => {
-        if (event.colDef.field === 'btsave') {
-            SaveData(event.data);
-        }
-    }, []);
+    async function AddLines() {
+        axios.put(SttLinesToHeadURL, {
+            header: {
+                'Content-Type': 'application/json',
+                HeadID: parentID,
+                token: props.token,
+            }
+        })
+            .then((result) => {
+                let pr = { myID: result.data.data[0].STT_HEAD_ID };
+                ShowDataChild(pr);
+                return;
+            })
+            .catch((err) => {
+                console.log('TestLineGrid.js (line: 211)', err);
+                console.error(err);
+            });
+    }
 
-    const onCellValueChanged = useCallback((event) => {
-        // ellenorzesek
-    }, []);
+    // const cellClickedListener = useCallback(event => {
+    //     if (event.colDef.field === 'btaddlines') {
+    //         AddLines(event.data);
+    //     }
+    // }, []);
 
     function delRow1() {
         props.setView("child2trash1")
@@ -215,7 +228,7 @@ export default function TestLinesGrid(props) {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "STT_LINE" }
+            headers: { data: deletedIds, datatable: "STT_LINES" }
         }).then(() => {
             let pr = { myID: parentID };
             ShowDataChild(pr)
@@ -250,7 +263,7 @@ export default function TestLinesGrid(props) {
                 </div>
             </div>
         </div>
-        <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
+        <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 400 }}>
             <AgGridReact ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}
@@ -258,7 +271,6 @@ export default function TestLinesGrid(props) {
                 defaultColDef={defaultColDef}
                 animateRows={true}
                 onCellValueChanged={onCellValueChanged}
-                onCellClicked={cellClickedListener}
                 rowSelection='multiple'>
             </AgGridReact>
         </div>

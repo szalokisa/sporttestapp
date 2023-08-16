@@ -53,21 +53,21 @@ export default function SportabilitiesGrid(props) {
         ShowData();
     }, []);
 
-    const navigateToNextCell = useCallback((params) => {
-        var suggestedNextCell = params.nextCellPosition;
-        var KEY_UP = 'ArrowUp';
-        var KEY_DOWN = 'ArrowDown';
-        var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
-        if (noUpOrDownKeyPressed || !suggestedNextCell) {
-            return suggestedNextCell;
-        }
-        gridRef.current.api.forEachNode(function (node) {
-            if (node.rowIndex === suggestedNextCell.rowIndex) {
-                node.setSelected(true);
-            }
-        });
-        return suggestedNextCell;
-    }, []);
+    // const navigateToNextCell = useCallback((params) => {
+    //     var suggestedNextCell = params.nextCellPosition;
+    //     var KEY_UP = 'ArrowUp';
+    //     var KEY_DOWN = 'ArrowDown';
+    //     var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
+    //     if (noUpOrDownKeyPressed || !suggestedNextCell) {
+    //         return suggestedNextCell;
+    //     }
+    //     gridRef.current.api.forEachNode(function (node) {
+    //         if (node.rowIndex === suggestedNextCell.rowIndex) {
+    //             node.setSelected(true);
+    //         }
+    //     });
+    //     return suggestedNextCell;
+    // }, []);
 
     const onCellValueChanged = useCallback((event) => {
         SaveData(event.data);
@@ -149,7 +149,7 @@ export default function SportabilitiesGrid(props) {
                 from: 'vSportAbilities',
                 where: '',
                 groupby: '',
-                orderby: 'SportAbilityName',
+                orderby: 'ID DESC',
                 token: props.token,
             },
         })
@@ -197,7 +197,6 @@ export default function SportabilitiesGrid(props) {
                     defaultColDef={defaultColDef}
                     animateRows={true}
                     onCellValueChanged={onCellValueChanged}
-                    navigateToNextCell={navigateToNextCell}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

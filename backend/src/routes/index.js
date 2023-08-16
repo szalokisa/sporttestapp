@@ -10,6 +10,7 @@ import sportabilitiesRouter from './sportabilities.routes';
 import exercisesRouter from './exercises.routes';
 import subgriddataRouter from './subgriddata.routes';
 import delrecRouter from './delrec.routes';
+import sttlinestoheadRouter from './sttlinestohead.routes';
 
 export const api = apiRouter;
 export const docs = docsRouter;
@@ -22,4 +23,5 @@ export const gridcombodata = gridcombodataRouter;
 export const sportabilities = sportabilitiesRouter;
 export const exercises = exercisesRouter;
 export const subgriddata = subgriddataRouter;
-export const delrec = delrecRouter
+export const delrec = delrecRouter;
+export const sttlinestohead = sttlinestoheadRouter;

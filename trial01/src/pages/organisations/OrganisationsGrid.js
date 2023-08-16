@@ -148,7 +148,7 @@ export default function OrganisationsGrid(props) {
                 from: 'vOrganisations',
                 where: '',
                 groupby: '',
-                orderby: 'OrganisationName',
+                orderby: 'ID DESC',
                 token: props.token,
             },
         })
