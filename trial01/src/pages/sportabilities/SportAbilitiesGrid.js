@@ -27,6 +27,7 @@ export default function SportabilitiesGrid(props) {
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
             filter: true,
+            minWidth: 200,
             editable: true
         },
         {
@@ -35,7 +36,7 @@ export default function SportabilitiesGrid(props) {
             cellEditor: 'agLargeTextCellEditor',
             cellEditorPopup: true,
             filter: true,
-            minWidth: 500,
+            minWidth: 750,
             editable: true
         },
     ]);
@@ -189,7 +190,7 @@ export default function SportabilitiesGrid(props) {
             </div>
         </div>
         <div class="row">
-            <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 300 }}>
+            <div className="ag-theme-alpine-dark" style={{ width: 1000, height: 400 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}

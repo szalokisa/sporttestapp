@@ -31,6 +31,7 @@ export default function ResToExGrid(props) {
             headerName: 'Leírás',
             field: 'ResultTypeDescription',
             filter: true,
+            width: 400,
             editable: true
         },
         {
@@ -38,6 +39,7 @@ export default function ResToExGrid(props) {
             headerName: 'Mértékegység',
             cellEditor: 'agSelectCellEditor',
             editable: true,
+            width: 200,
             cellEditorParams: {
                 values: props.unitComboData.data
             },
@@ -200,7 +202,7 @@ export default function ResToExGrid(props) {
                 </div>
             </div>
         </div>
-        <div className="ag-theme-alpine-dark" style={{ width: 900, height: 300 }}>
+        <div className="ag-theme-alpine-dark" style={{ width: 650, height: 350 }}>
             <AgGridReact ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}

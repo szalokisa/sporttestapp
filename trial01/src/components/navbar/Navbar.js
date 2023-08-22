@@ -23,16 +23,16 @@ export default function Navbar() {
             <div id="main-menu" className={hamMenu}>
                 <ul className="top-level">
                     <li>
-                        <NavLink to="/exercises" onClick={closeHamMenu}>Gyakorlatok</NavLink>
-                    </li>
-                    <li>
                         <NavLink to="/sportabilities" onClick={closeHamMenu}>Képességek</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/persons" onClick={closeHamMenu}>Sportolók</NavLink>
+                        <NavLink to="/exercises" onClick={closeHamMenu}>Gyakorlatok</NavLink>
                     </li>
                     <li>
                         <NavLink to="/organisations" onClick={closeHamMenu}>Szervezetek</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/persons" onClick={closeHamMenu}>Sportolók</NavLink>
                     </li>
                     <li>
                         <NavLink to="/testtemplates" onClick={closeHamMenu}>Teszt sablonok</NavLink>
@@ -40,9 +40,9 @@ export default function Navbar() {
                     <li>
                         <NavLink to="/tests" onClick={closeHamMenu}>Tesztek</NavLink>
                     </li>
-                    {/* <li>
-                        <NavLink to="/proba" onClick={closeHamMenu}>Próba</NavLink>
-                    </li> */}
+                    <li>
+                        <NavLink to="/proba" onClick={closeHamMenu}>Statisztikák</NavLink>
+                    </li>
                 </ul>
                 <ul className="top-level">
                     <li>

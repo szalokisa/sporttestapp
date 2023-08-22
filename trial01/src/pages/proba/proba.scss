@@ -1,14 +1,26 @@
 .proba-page {
-    .area.DEFAULT {
-        background-color: magenta;
+    .area1.DEFAULT {
+        display: none;
     }
 
-    .area1.A2 {
-        background-color: aqua;
+    .area2.DEFAULT {
+        display: none;
+    }
+    
+    .area.A2 {
+        display: none;
+    }
+    
+    .area2.A2 {
+        display: none;
     }
 
-    .area2.A1 {
-        background-color: red;
+    .area.A1 {
+        display: none;
+    }
+
+    .area1.A1 {
+        display: none;
     }
 
 }

@@ -228,7 +228,7 @@ export default function ExercisesGrid(props) {
             </div>
         </div>
         <div class="row">
-            <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 300 }}>
+            <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 500 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}

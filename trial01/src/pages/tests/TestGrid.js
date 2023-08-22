@@ -219,7 +219,7 @@ export default function TestGrid(props) {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "Test" }
+            headers: { data: deletedIds, datatable: "STT_HEAD" }
         }).then(() => {
             ShowData()
         }).catch((err) => {

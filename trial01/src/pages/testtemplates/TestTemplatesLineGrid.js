@@ -50,6 +50,7 @@ export default function TestTemplatesLineGrid(props) {
             wrapText: true,
             autoHeight: true,
             headerName: 'Leírás',
+            width: 300,
             editable: false,
         },
         {

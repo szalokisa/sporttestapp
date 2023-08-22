@@ -34,7 +34,7 @@ export default function TestTemplatesGrid(props) {
             field: 'TestTemplatesDescription',
             headerName: 'Leírás',
             cellEditor: 'agLargeTextCellEditor',
-            width: 350,
+            width: 400,
             cellEditorPopup: true,
             wrapText: true,
             autoHeight: true,
@@ -215,7 +215,7 @@ export default function TestTemplatesGrid(props) {
             </div>
         </div>
         <div class="row">
-            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
+            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 600 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}
