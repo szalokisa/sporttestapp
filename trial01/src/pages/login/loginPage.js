@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./loginPage.scss";
 import axios from 'axios';
-import comboData from "../../components/comboData/comboData"
 import GridComboData from "../../components/comboData/gridcomboData";
 import StartSite from "../../components/StartSite/StartSite"
 
@@ -24,24 +23,6 @@ async function GetToken(credentials) {
     })
     return token;
 }
-
-// async function initClubCombo(props) {
-//     const comboProps = {
-//         token: props.token,
-//         from: 'organisations_view',
-//         select: 'value, text',
-//         language: props.language,
-//         top: '500',
-//         where: '',
-//         groupby: '',
-//         orderby: 'text',
-//         with0: 'true',
-//     }
-//     const clubComboData = await comboData(comboProps)
-//     props.setClubComboData(clubComboData);
-
-//     return clubComboData;
-// }
 
 async function initSportAbilityCombo(props) {
     const comboAbilitiesProps = {

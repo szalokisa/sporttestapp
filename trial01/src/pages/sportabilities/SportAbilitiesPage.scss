@@ -21,6 +21,11 @@
     .formbtndel2.HEAD {
         display: none;
     }
+    
+    .formbtndel1.HEAD {
+        display: flex;
+        justify-content: right;
+    }
 
     .formbtndel2.CHILD {
         display: none;
@@ -36,6 +41,11 @@
 
     .formbtncancel.HEAD {
         display: none;
+    }
+
+    .formbtncancel.trash1 {
+        display: flex;
+        justify-content: right;
     }
 
     .formbtncancel.CHILD {
