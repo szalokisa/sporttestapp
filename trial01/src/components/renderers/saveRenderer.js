@@ -1,12 +1,11 @@
 import React from 'react';
-import pencilIcon from "../icons/pencil.svg"
-
+import checkboxicon from "../icons/checkbox.svg"
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
     const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
 
     const buttonClicked = () => {
-        console.log('+++ saveRenderer.js (line: 8)', props);
+        console.log('saveRenderer.js (line: 8)', props);
     };
 
     return (
@@ -14,7 +13,7 @@ export default (props) => {
             <span>{cellValue}</span>&nbsp;
             <img
                 className='pencilIcon'
-                src={pencilIcon}
+                src={checkboxicon}
                 onClick={() => buttonClicked()}
                 alt="pencil"
             />

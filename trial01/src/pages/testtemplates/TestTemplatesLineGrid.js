@@ -15,7 +15,6 @@ export default function TestTemplatesLineGrid(props) {
     const [parentID, setParentID] = useState(0);
     const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
-    // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
 
     const getRowId = useCallback(function (params) {
         return params.data.ID;
@@ -118,7 +117,7 @@ export default function TestTemplatesLineGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -128,7 +127,7 @@ export default function TestTemplatesLineGrid(props) {
                 where: mywhere,
                 groupby: '',
                 orderby: 'ID',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -158,7 +157,7 @@ export default function TestTemplatesLineGrid(props) {
                 Data: saveprops,
                 HeadID: parentID,
                 Identifier: 'TestTemplatesLine',
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {
@@ -171,19 +170,41 @@ export default function TestTemplatesLineGrid(props) {
             });
     }
 
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
     const cellClickedListener = useCallback(event => {
         if (event.colDef.field === 'btsave') {
-            SaveData(event.data);
+            stopEditing();
         }
     }, []);
 
-    const onCellValueChanged = useCallback((event) => {
-        // ellenorzesek
+    const onRowValueChanged = useCallback((event) => {
+        let dataJson;
+        try {
+            let dataJsonStr = JSON.stringify(event.data);
+            dataJson = JSON.parse(dataJsonStr);
+            dataJson['Test_Template_ID'] = pID.current;
+        }
+        catch (err) {
+            console.log('ResToExGrid.js (line: 153)', err);
+        }
+        SaveData(dataJson);
     }, []);
 
     function delRow1() {
         props.setView("childtrash1")
     }
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("CHILDEDITING")
+    }, []);
+
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("CHILD")
+    }, []);
 
     function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
@@ -231,7 +252,10 @@ export default function TestTemplatesLineGrid(props) {
                 getRowId={getRowId}
                 defaultColDef={defaultColDef}
                 animateRows={true}
-                onCellValueChanged={onCellValueChanged}
+                editType={'fullRow'}
+                onRowValueChanged={onRowValueChanged}
+                onRowEditingStarted={onRowEditingStarted}
+                onRowEditingStopped={onRowEditingStopped}
                 onCellClicked={cellClickedListener}
                 rowSelection='multiple'>
             </AgGridReact>

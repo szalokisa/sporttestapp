@@ -3,6 +3,8 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
+import { validators } from '../../components/validators/validators';
+import saveRenderer from '../../components/renderers/saveRenderer'
 
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
@@ -25,62 +27,74 @@ export default function OrganisationsGrid(props) {
             field: 'OrganisationName',
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
+            cellStyle: params => {
+                const invalid = validators.validate('required', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
             filter: true,
-            editable: true
+            minWidth: 350,
+            editable: true,
         },
         {
             headerName: 'Email',
             field: 'EmailAddress',
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
+            cellStyle: params => {
+                const invalid = validators.validate('validEmail', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
+            minWidth: 500,
             filter: true,
-            editable: true
+            editable: true,
+        },
+        {
+            field: 'btsave',
+            width: 70,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
         },
     ]);
 
     // DefaultColDef sets props common to all Columns
     const defaultColDef = useMemo(() => ({
-        sortable: true
+        sortable: true,
+        resizable: true,
     }));
-
-    // function _FnRefreshGrid() {
-    //     ShowData();
-    // }
 
     useEffect(() => {
         ShowData();
     }, []);
 
-    const navigateToNextCell = useCallback((params) => {
-        var suggestedNextCell = params.nextCellPosition;
-        var KEY_UP = 'ArrowUp';
-        var KEY_DOWN = 'ArrowDown';
-        var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
-        if (noUpOrDownKeyPressed || !suggestedNextCell) {
-            return suggestedNextCell;
-        }
-        gridRef.current.api.forEachNode(function (node) {
-            if (node.rowIndex === suggestedNextCell.rowIndex) {
-                node.setSelected(true);
-            }
-        });
-        return suggestedNextCell;
+    const onRowValueChanged = useCallback((event) => {
+        props.setView("HEAD")
+        SaveData(event.data);
     }, []);
 
-    const onCellValueChanged = useCallback((event) => {
-        SaveData(event.data);
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("EDITING")
+    }, []);
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("HEAD")
     }, []);
 
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID }
         axios.put(DataURL, {
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
                 Data: saveprops,
                 Identifier: 'Organisations',
-                token: props.token
             }
         })
             .then((result) => {
@@ -92,11 +106,21 @@ export default function OrganisationsGrid(props) {
             });
     }
 
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
+    const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btsave') {
+            stopEditing();
+        }
+    }, []);
+
     function createNewRowData() {
         const newData = {
             ID: 0,
-            OrganisationName: "-",
-            EmailAddress: "-",
+            OrganisationName: "",
+            EmailAddress: "",
         };
         return newData;
     }
@@ -139,7 +163,7 @@ export default function OrganisationsGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -149,7 +173,7 @@ export default function OrganisationsGrid(props) {
                 where: '',
                 groupby: '',
                 orderby: 'ID DESC',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -171,7 +195,15 @@ export default function OrganisationsGrid(props) {
     return (<div className="OrganisationsGrid">
         <div class='row'>
             <div class="col-md-4">
-                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                <div className={`formbtnnew ${props.view}`}>
+                    <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
+                <div className={`formbtnnewplaceholder ${props.view}`}>
+                    <button type='button'
+                        className='btn btn-secondary'
+                        disabled='true'
+                        onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
             </div>
             <div class="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
@@ -188,15 +220,17 @@ export default function OrganisationsGrid(props) {
             </div>
         </div>
         <div class="row">
-            <div className="ag-theme-alpine-dark" style={{ width: 1100, height: 300 }}>
+            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}
                     getRowId={getRowId}
                     defaultColDef={defaultColDef}
-                    animateRows={true}
-                    onCellValueChanged={onCellValueChanged}
-                    navigateToNextCell={navigateToNextCell}
+                    editType={'fullRow'}
+                    onRowValueChanged={onRowValueChanged}
+                    onRowEditingStarted={onRowEditingStarted}
+                    onRowEditingStopped={onRowEditingStopped}
+                    onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

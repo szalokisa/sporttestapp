@@ -5,7 +5,7 @@ export default (props) => {
     const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
 
     const buttonClicked = () => {
-        console.log('+++ deleteRenderer.js (line: 8)', props);
+        console.log('deleteRenderer.js (line: 8)', props);
     };
 
     return (

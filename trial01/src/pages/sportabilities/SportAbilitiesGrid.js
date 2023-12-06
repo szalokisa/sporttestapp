@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import openRenderer from '../../components/renderers/openRenderer';
 import axios from 'axios';
+import { validators } from '../../components/validators/validators';
+import saveRenderer from '../../components/renderers/saveRenderer'
 
 const SportAbilitiesURL = `${process.env.REACT_APP_API_BASE_URL}/sportabilities`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
@@ -27,51 +28,63 @@ export default function SportabilitiesGrid(props) {
             cellEditor: 'agTextCellEditor',
             cellEditorPopup: false,
             filter: true,
-            minWidth: 200,
+            cellStyle: params => {
+                const invalid = validators.validate('required', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
+            minWidth: 300,
             editable: true
         },
         {
             headerName: 'Leírás',
             field: 'Remark',
-            cellEditor: 'agLargeTextCellEditor',
-            cellEditorPopup: true,
+            cellEditor: 'agTextCellEditor',
+            cellEditorPopup: false,
             filter: true,
             minWidth: 750,
             editable: true
+        },
+        {
+            field: 'btsave',
+            width: 70,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
         },
     ]);
 
     // DefaultColDef sets props common to all Columns
     const defaultColDef = useMemo(() => ({
-        sortable: true
+        sortable: true,
+        resizable: true,
     }));
 
-    function _FnRefreshGrid() {
-        ShowData();
+    const onRowValueChanged = useCallback((event) => {
+        props.setView("HEAD")
+        SaveData(event.data);
+    }, []);
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("EDITING")
+    }, []);
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("HEAD")
+    }, []);
+
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
     }
+    const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btsave') {
+            stopEditing();
+        }
+    }, []);
 
     useEffect(() => {
         ShowData();
-    }, []);
-
-    // const navigateToNextCell = useCallback((params) => {
-    //     var suggestedNextCell = params.nextCellPosition;
-    //     var KEY_UP = 'ArrowUp';
-    //     var KEY_DOWN = 'ArrowDown';
-    //     var noUpOrDownKeyPressed = params.key !== KEY_DOWN && params.key !== KEY_UP;
-    //     if (noUpOrDownKeyPressed || !suggestedNextCell) {
-    //         return suggestedNextCell;
-    //     }
-    //     gridRef.current.api.forEachNode(function (node) {
-    //         if (node.rowIndex === suggestedNextCell.rowIndex) {
-    //             node.setSelected(true);
-    //         }
-    //     });
-    //     return suggestedNextCell;
-    // }, []);
-
-    const onCellValueChanged = useCallback((event) => {
-        SaveData(event.data);
     }, []);
 
     async function SaveData(saveprops) {
@@ -97,8 +110,8 @@ export default function SportabilitiesGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            SportAbilityName: "-",
-            Remark: "-",
+            SportAbilityName: "",
+            Remark: "",
         };
         return newData;
     }
@@ -141,7 +154,7 @@ export default function SportabilitiesGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -151,7 +164,7 @@ export default function SportabilitiesGrid(props) {
                 where: '',
                 groupby: '',
                 orderby: 'ID DESC',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -171,11 +184,19 @@ export default function SportabilitiesGrid(props) {
     }
 
     return (<div className="SportAbilitiesGrid">
-        <div class='row'>
-            <div class="col-md-4">
-                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+        <div className="row">
+            <div className="col-md-4">
+                <div className={`formbtnnew ${props.view}`}>
+                    <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
+                <div className={`formbtnnewplaceholder ${props.view}`}>
+                    <button type='button'
+                        className='btn btn-secondary'
+                        disabled='true'
+                        onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -183,21 +204,24 @@ export default function SportabilitiesGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div className="ag-theme-alpine-dark" style={{ width: 1000, height: 400 }}>
+        <div className="row">
+            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 400 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}
                     getRowId={getRowId}
                     defaultColDef={defaultColDef}
-                    animateRows={true}
-                    onCellValueChanged={onCellValueChanged}
+                    editType={'fullRow'}
+                    onRowValueChanged={onRowValueChanged}
+                    onRowEditingStarted={onRowEditingStarted}
+                    onRowEditingStopped={onRowEditingStopped}
+                    onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

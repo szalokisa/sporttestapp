@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.page-exercises {
+.page-sportab {
 
     .grid2.HEAD {
         display: none;
@@ -13,7 +13,7 @@
     .grid1.CHILD {
         display: none;
     }
-  
+
     .grid1.childtrash1 {
         display: none;
     }
@@ -21,7 +21,7 @@
     .formbtndel2.HEAD {
         display: none;
     }
-    
+
     .formbtndel1.HEAD {
         display: flex;
         justify-content: right;
@@ -52,5 +52,32 @@
         display: none;
     }
 
+    .formbtnnewplaceholder.HEAD {
+        display: none;
+    }
+
+    .formbtndel1.EDITING {
+        display: none;
+    }
+
+    .formbtndel2.EDITING {
+        display: none;
+    }
+
+    .formbtncancel.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.trash1 {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.trash1 {
+        display: none;
+    }
 
 }

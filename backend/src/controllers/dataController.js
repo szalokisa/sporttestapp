@@ -39,7 +39,7 @@ export const dataController = {
     },
 
     async saveData(req, res, next) {
-        let result;
+        let result; 
         try {
             result = await dataService.saveData(req.body.headers);
             res.status(200).json(result);

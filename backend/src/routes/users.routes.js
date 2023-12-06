@@ -11,7 +11,7 @@ router.use(cors());
 router.use(express.json());
 //router.use(verifyLocalSystem);
 
-router.put('/', usersController.registerUser);
-router.put('/login', usersController.login);
+router.put('/', usersController.createUser);
+//router.put('/login', usersController.login);
 
 export default router;

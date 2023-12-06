@@ -3,8 +3,10 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
+import { validators } from '../../components/validators/validators';
+import saveRenderer from '../../components/renderers/saveRenderer'
 
-const ResToExURL = `${process.env.REACT_APP_API_BASE_URL}/exercises/restoex`;
+const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
 export default function ResToExGrid(props) {
@@ -28,8 +30,15 @@ export default function ResToExGrid(props) {
             hide: true,
         },
         {
-            headerName: 'Leírás',
             field: 'ResultTypeDescription',
+            headerName: 'Leírás',
+            cellStyle: params => {
+                const invalid = validators.validate('required', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
             filter: true,
             width: 400,
             editable: true
@@ -39,16 +48,30 @@ export default function ResToExGrid(props) {
             headerName: 'Mértékegység',
             cellEditor: 'agSelectCellEditor',
             editable: true,
-            width: 200,
+            cellStyle: params => {
+                const invalid = validators.validate('required', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
+            width: 180,
             cellEditorParams: {
                 values: props.unitComboData.data
             },
 
         },
+        {
+            field: 'btsave',
+            width: 70,
+            headerName: 'save',
+            cellRenderer: saveRenderer,
+        },
     ]);
 
     const defaultColDef = useMemo(() => ({
-        sortable: true
+        sortable: true,
+        resizable: true,
     }));
 
     function addItem() {
@@ -65,7 +88,7 @@ export default function ResToExGrid(props) {
     function createNewRowData() {
         const newData = {
             ID: 0,
-            ResultTypeDescription: "-",
+            ResultTypeDescription: "",
             UnitName: "---",
         };
         return newData;
@@ -95,7 +118,7 @@ export default function ResToExGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -105,7 +128,7 @@ export default function ResToExGrid(props) {
                 where: mywhere,
                 groupby: '',
                 orderby: 'ID',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -127,18 +150,20 @@ export default function ResToExGrid(props) {
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID };
-
-        axios.put(ResToExURL, {
+        saveprops['ExerciseID'] = pID.current;
+        axios.put(DataURL, {
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
-                ExerciseName: saveprops.ExerciseName,
-                ResultTypeDescription: saveprops.ResultTypeDescription,
-                UnitName: saveprops.UnitName,
-                ExerciseID: saveprops.ExerciseID,
+                Data: saveprops,
+                HeadID: parentID,
+                Identifier: 'RESTOEX',
+                token: props.loginData.token,
             }
         })
             .then((result) => {
+                let pr = { myID: result.data.data[0].ExerciseID };
+                ShowDataChild(pr);
                 return;
             })
             .catch((err) => {
@@ -146,7 +171,17 @@ export default function ResToExGrid(props) {
             });
     }
 
-    const onCellValueChanged = useCallback((event) => {
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
+    const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btsave') {
+            stopEditing();
+        }    
+    }, []);    
+
+    const onRowValueChanged = useCallback((event) => {
         let dataJson;
         try {
             let dataJsonStr = JSON.stringify(event.data);
@@ -162,6 +197,15 @@ export default function ResToExGrid(props) {
     function delRow1() {
         props.setView("childtrash1")
     }
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("CHILDEDITING")
+    }, []);
+
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("CHILD")
+    }, []);
 
     function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
@@ -184,11 +228,11 @@ export default function ResToExGrid(props) {
     return (<div className="ResToExGrid">
         <h2>Várt eredmények / {parentName} </h2>
         <div className='row'>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
                 <button type='button' className='btn btn-close' onClick={closeMe}></button>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -196,20 +240,24 @@ export default function ResToExGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>
             </div>
         </div>
-        <div className="ag-theme-alpine-dark" style={{ width: 650, height: 350 }}>
+        <div className="ag-theme-alpine-dark" style={{ width: 660, height: 350 }}>
             <AgGridReact ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}
                 getRowId={getRowId}
                 defaultColDef={defaultColDef}
                 animateRows={true}
-                onCellValueChanged={onCellValueChanged}
+                editType={'fullRow'}
+                onRowValueChanged={onRowValueChanged}
+                onRowEditingStarted={onRowEditingStarted}
+                onRowEditingStopped={onRowEditingStopped}
+                onCellClicked={cellClickedListener}
                 rowSelection='multiple'>
             </AgGridReact>
         </div>

@@ -46,7 +46,7 @@ function ExercisesPage(props) {
                     biRef={biRef}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     sportAbilitiesComboData={props.sportAbilitiesComboData}
-                    token={props.token}
+                    loginData={props.loginData}
                     setView={setView}
                     view={view}
                 />
@@ -59,7 +59,7 @@ function ExercisesPage(props) {
                     biRef={biRef}
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    token={props.token}
+                    loginData={props.loginData}
                     unitComboData={props.unitComboData}
                     onCancel={editResToExCancelled}
                     refreshId={refreshId}

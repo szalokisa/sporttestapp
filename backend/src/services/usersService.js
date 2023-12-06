@@ -1,6 +1,7 @@
 import {
-    USERS_CREATE,
-    Users_GetByEmail
+    Users_GetByEmail,
+    WAT_USER_REGISTER,
+    USERS_CREATE
 } from "../db/storedProcedures";
 
 import { genSalt, hash, compareSync } from "bcryptjs";
@@ -10,9 +11,15 @@ export const usersService = {
     async register(queryParams) {
         const salt = await genSalt(10);
         queryParams.passHash = await hash(queryParams.password, salt);
-        return await USERS_CREATE(queryParams);
+        return await WAT_USER_REGISTER(queryParams);
     },
 
+    async createNew(queryParams) {
+        const salt = await genSalt(10);
+        queryParams.passHash = await hash(queryParams.password, salt);
+        return await USERS_CREATE(queryParams);
+    },
+    
     async login(queryParams) {
         const userData = await Users_GetByEmail(queryParams);
         if (!compareSync(queryParams.password, userData.passHash)) {

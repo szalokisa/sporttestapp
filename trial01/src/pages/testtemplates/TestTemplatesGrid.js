@@ -33,9 +33,9 @@ export default function TestTemplatesGrid(props) {
         {
             field: 'TestTemplatesDescription',
             headerName: 'Leírás',
-            cellEditor: 'agLargeTextCellEditor',
+            cellEditor: 'agTextCellEditor',
             width: 400,
-            cellEditorPopup: true,
+            cellEditorPopup: false,
             wrapText: true,
             autoHeight: true,
             filter: true,
@@ -79,13 +79,20 @@ export default function TestTemplatesGrid(props) {
         ShowData();
     }, []);
 
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
     const cellClickedListener = useCallback(event => {
+        if (event.colDef.field === 'btnopen') {
+            stopEditing();
+        }
+        if (event.colDef.field === 'btsave') {
+            stopEditing();
+        }
         props.biRef.HeadGridShowDataChildFromParent({ myID: event.data.ID });
         props.biRef.HeadGridSetParentID({ myID: event.data.ID });
         props.biRef.HeadGridSetParentName({ myName: event.data.TestTemplatesName });
-        if (event.colDef.field === 'btsave') {
-            SaveData(event.data);
-        }
     }, []);
 
     function _FnRefreshGrid() {
@@ -94,8 +101,17 @@ export default function TestTemplatesGrid(props) {
 
     props.biRef.childGridClosed = _FnRefreshGrid;
 
-    const onCellValueChanged = useCallback((event) => {
-        // SaveData(event.data);
+    const onRowValueChanged = useCallback((event) => {
+        props.setView("HEAD")
+        SaveData(event.data);
+    }, []);
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("EDITING")
+    }, []);
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("HEAD")
     }, []);
 
     async function SaveData(saveprops) {
@@ -107,7 +123,7 @@ export default function TestTemplatesGrid(props) {
                 ID: recID,
                 Data: saveprops,
                 Identifier: 'TestTemplates',
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {
@@ -166,7 +182,7 @@ export default function TestTemplatesGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -176,7 +192,7 @@ export default function TestTemplatesGrid(props) {
                 where: '',
                 groupby: '',
                 orderby: 'TestTemplatesName',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -198,7 +214,15 @@ export default function TestTemplatesGrid(props) {
     return (<div className="TestTemplatesGrid">
         <div class='row'>
             <div class="col-md-4">
-                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                <div className={`formbtnnew ${props.view}`}>
+                    <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
+                <div className={`formbtnnewplaceholder ${props.view}`}>
+                    <button type='button'
+                        className='btn btn-secondary'
+                        disabled='true'
+                        onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
             </div>
             <div class="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
@@ -222,7 +246,10 @@ export default function TestTemplatesGrid(props) {
                     getRowId={getRowId}
                     defaultColDef={defaultColDef}
                     animateRows={true}
-                    onCellValueChanged={onCellValueChanged}
+                    editType={'fullRow'}
+                    onRowValueChanged={onRowValueChanged}
+                    onRowEditingStarted={onRowEditingStarted}
+                    onRowEditingStopped={onRowEditingStopped}
                     onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>

@@ -16,12 +16,20 @@ export * from './SportAbilities_Delete';
 export * from './Exercises_Read';
 export * from './Exercises_Save';
 export * from './Exercises_Delete';
-export * from './SubGrid_DATA_GET';
+// export * from './SubGrid_DATA_GET';
 export * from './ResultsToExercises_Save';
 export * from './DELETE_RECORDS';
 export * from './Save_Data';
 export * from './AddTestLinesToHead';
+export * from './WAT_USER_REGISTER';
 
+export { default as WAT_USER_DELETE_BY_EMAIL } from './WAT_USER_DELETE_BY_EMAIL';
+export { default as WAT_USER_DELETE_BY_ID } from './WAT_USER_DELETE_BY_ID';
+export { default as WAT_USER_GET_BY_ID } from './WAT_USER_GET_BY_ID';
+export { default as WAT_USER_GET_BY_EMAIL } from './WAT_USER_GET_BY_EMAIL';
+export { default as WAT_USER_PARAMS_GET } from './WAT_USER_PARAMS_GET';
+// export { default as WAT_USER_REGISTER } from './WAT_USER_REGISTER';
+export { default as WAT_USER_UPDATE } from './WAT_USER_UPDATE';
 
 
 

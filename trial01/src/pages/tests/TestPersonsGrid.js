@@ -111,7 +111,7 @@ export default function TestPersonsGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -121,7 +121,7 @@ export default function TestPersonsGrid(props) {
                 where: mywhere,
                 groupby: '',
                 orderby: 'ID',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -151,7 +151,7 @@ export default function TestPersonsGrid(props) {
                 Data: saveprops,
                 HeadID: parentID,
                 Identifier: 'STT_PERSONS',
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {
@@ -164,15 +164,42 @@ export default function TestPersonsGrid(props) {
             });
     }
 
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
     const cellClickedListener = useCallback(event => {
         if (event.colDef.field === 'btsave') {
-            SaveData(event.data);
+            stopEditing();
         }
     }, []);
 
-    const onCellValueChanged = useCallback((event) => {
-        // ellenorzesek
+    const onRowValueChanged = useCallback((event) => {
+        let dataJson;
+        try {
+            let dataJsonStr = JSON.stringify(event.data);
+            dataJson = JSON.parse(dataJsonStr);
+            dataJson['STT_HEAD_ID'] = pID.current;
+        }
+        catch (err) {
+            console.log('TestPersonsGrid.js (line: 185)', err);
+        }
+        SaveData(dataJson);
     }, []);
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("CHILDEDITING")
+    }, []);
+
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("CHILD")
+    }, []);
+
+
+    // const onCellValueChanged = useCallback((event) => {
+    //     // ellenorzesek
+    // }, []);
 
     function delRow1() {
         props.setView("childtrash1")
@@ -224,7 +251,11 @@ export default function TestPersonsGrid(props) {
                 getRowId={getRowId}
                 defaultColDef={defaultColDef}
                 animateRows={true}
-                onCellValueChanged={onCellValueChanged}
+                // onCellValueChanged={onCellValueChanged}
+                editType={'fullRow'}
+                onRowValueChanged={onRowValueChanged}
+                onRowEditingStarted={onRowEditingStarted}
+                onRowEditingStopped={onRowEditingStopped}
                 onCellClicked={cellClickedListener}
                 rowSelection='multiple'>
             </AgGridReact>

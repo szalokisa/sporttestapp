@@ -32,14 +32,15 @@ $theme-colors: (
 
 header {
     .logo-area {
-        width: 200px;
+        width: 150px;
     }
 }
 
 @media screen and (max-width: 480px) {
-header {
-    .logo-area {
-        width: 150px;
+    header {
+        .logo-area {
+            display: flex;
+            width: 100px;
+        }
     }
-}
 }

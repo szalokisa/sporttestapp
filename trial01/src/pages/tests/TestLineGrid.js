@@ -138,7 +138,7 @@ export default function TestLinesGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -148,7 +148,7 @@ export default function TestLinesGrid(props) {
                 where: mywhere,
                 groupby: '',
                 orderby: 'PersonName',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -182,7 +182,7 @@ export default function TestLinesGrid(props) {
                 Data: saveprops,
                 HeadID: parentID,
                 Identifier: 'STT_LINES',
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {
@@ -191,6 +191,7 @@ export default function TestLinesGrid(props) {
                 return;
             })
             .catch((err) => {
+                console.log('TestLineGrid.js (line: 195)', err);
                 console.error(err);
             });
     }
@@ -200,7 +201,7 @@ export default function TestLinesGrid(props) {
             header: {
                 'Content-Type': 'application/json',
                 HeadID: parentID,
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {

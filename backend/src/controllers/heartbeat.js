@@ -3,7 +3,7 @@ import { PING as sqlPing } from '../db/storedProcedures';
 export const heartbeat = async (req, res) => {
   const result = {
     heartbeat: true,
-    version: '2022.07.01-01',
+    version: '2023.11.28 15:09',
     dbConnection: false,
   }
   try {

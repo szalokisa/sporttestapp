@@ -3,8 +3,7 @@ import { db } from '../dbConnection';
 
 export async function USERS_CREATE(queryParams) {
   const storedProcedure = new StoredProcedure('USERS_CREATE')
-
-  storedProcedure.addParam('login', 'NVarChar', queryParams.email, { length: 'max' });
+  storedProcedure.addParam('login', 'NVarChar', queryParams.login, { length: 'max' });
   storedProcedure.addParam('passHash', 'NVarChar', queryParams.passHash, { length: 'max' });
   storedProcedure.addParam('userLevel', 'NVarChar', queryParams.userlevel, { length: 'max' });
   storedProcedure.addParam('params', 'NVarChar', queryParams.params, { length: 'max' });

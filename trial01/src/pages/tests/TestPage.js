@@ -50,7 +50,7 @@ function TestPage(props) {
                     biRef={biRef}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
                     testTemplatesComboData={props.testTemplatesComboData}
-                    token={props.token}
+                    loginData={props.loginData}
                     setView={setView}
                     view={view}
                 />
@@ -63,7 +63,7 @@ function TestPage(props) {
                     biRef={biRef}
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    token={props.token}
+                    loginData={props.loginData}
                     personsComboData={props.personsComboData}
                     onCancel={editChild1Cancelled}
                     refreshId={refreshId}
@@ -80,8 +80,7 @@ function TestPage(props) {
                     biRef={biRef}
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    token={props.token}
-                    // personsComboData={props.personsComboData}
+                    loginData={props.loginData}
                     onCancel={editChild1Cancelled}
                     refreshId={refreshId}
                     setRefreshId={setRefreshId}

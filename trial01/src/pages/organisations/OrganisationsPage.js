@@ -8,14 +8,14 @@ function OrganisationsPage(props) {
     const [view, setView] = useState('HEAD');
     // const [refreshId, setRefreshId] = useState(0);
 
-    return <main className="page-exercises">
+    return <main className="page-organisations">
         <TitleBar title='Cégek, szervezetek' />
         {
             <div className={`grid1 ${view}`}>
                 <OrganisationsGrid
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    token={props.token}
+                    loginData={props.loginData}
                     setView={setView}
                     view={view}
                 />

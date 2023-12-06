@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "abortTransactionOnError": false
+            },
+            "previewLimit": 50,
+            "server": "selazure.database.windows.net",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "TRIAL_SSS",
+            "group": "AZURE",
+            "database": "TRIAL_SSS",
+            "username": "TRIAL_SSS",
+            "password": "MRYit9HT78"
+        }
+    ]
+}

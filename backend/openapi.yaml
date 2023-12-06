@@ -5,7 +5,7 @@ info:
   title: SportTestApp
   termsOfService: http://swagger.io/terms/
   contact:
-    email: szaloki.sandor@selester.hu
+    email: szalokisa@gmail.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -17,18 +17,25 @@ tags:
     description: Checking service availability
   - name: api-docs
     description: Get this documentation from server
+  - name: users
+    description: manage user's data (NEW method))
+  - name: token
+    description: get token
   - name: data
     description: get reports data
-  - name: users
-    description: manage user's data
-  - name: persons
-    description: manage user's data
-  - name: sportabilities
-    description: manage sport ability data
+  - name: registration
+    description: accept or decline a registration
   - name: combodata
     description: get combo data
   - name: gridcombodata
     description: get grid combo data
+  - name: persons
+    description: manage persons data
+  - name: sportabilities
+    description: manage sport ability data
+  - name: users_old
+    description: manage user's data
+
 paths:
   /api/heartbeat:
     get:
@@ -132,10 +139,222 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+    put:
+      tags:
+        - data
+      summary: save data
+      parameters:
+        - in: header
+          name: ID
+          description: DataID
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: identifier
+          description: Data table name
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Data
+          description: Data
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: token
+          description: valid token
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/heartbeat"
+  /token:
+    get:
+      tags:
+        - token
+      summary: Get token
+      parameters:
+        - in: header
+          name: email
+          description: email address
+          required: false
+          schema:
+            type: string
+        - in: header
+          name: password
+          description: password
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Login successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/heartbeat'
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '403':
+          description: Login unsuccessfull
+    put:
+      tags:
+        - token
+      summary: Extend validity of a valid token
+      parameters:
+        - in: header
+          name: token
+          description: valid token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Renewal successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/heartbeat'
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '403':
+          description: Login unsuccessfull
   /users/:
     put:
       tags:
         - users
+      summary: Create a new user
+      description: Create a new user
+      parameters:
+        - in: header
+          name: Login
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: userLevel
+          required: true
+          schema:
+            type: string
+            enum: ['USER', 'ADMIN', 'ROOT']
+            default: 'ROOT'
+        - in: header
+          name: password
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: params
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User saved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/heartbeat'
+                  data:
+                    type: array
+                    items:
+                      type: object
+  /registration/:
+    post:
+      tags:
+        - registration
+      summary: Accept registration.
+      description: __🩸<u>ATTENTION!</u>🩸__<br>You must create the user before using this endpoint. See endpoint PUT /users/
+
+      parameters:
+        - in: header
+          name: tokenforacceptordecline
+          required: true
+          description: The token returned by endpoint /users/ (put)
+          schema:
+            type: string
+        - in: header
+          name: name
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: email
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: password
+          required: true
+          schema:
+            type: string
+        - in: header
+          required: true
+          name: language
+          schema:
+            type: string
+            enum: ['hu', 'de', 'gb']
+            default: 'hu'
+      responses:
+        '200':
+          description: Login successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  columns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/heartbeat'
+                  data:
+                    type: array
+                    items:
+                      type: object
+    delete:
+      tags:
+        - registration
+      summary: Decline registration
+      parameters:
+        - in: header
+          name: tokenforacceptordecline
+          required: true
+          description: The token returned by endpoint /users/ (put)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User successfully removed.
+  /users_old/:
+    put:
+      tags:
+        - users_old
       summary: manage user's data
       parameters:
         - in: header
@@ -163,11 +382,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/heartbeat"
-
   /users/login:
     post:
       tags:
-        - users
+        - users_old
       summary: User login by email
       parameters:
         - in: header

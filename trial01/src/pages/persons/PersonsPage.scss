@@ -1,6 +1,6 @@
 @import '../../App.scss';
 
-.page-exercises {
+.page-persons {
 
     .grid2.HEAD {
         display: none;
@@ -42,5 +42,32 @@
         display: none;
     }
 
+    .formbtndel1.EDITING {
+        display: none;
+    }
+
+    .formbtndel2.EDITING {
+        display: none;
+    }
+
+    .formbtncancel.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.EDITING {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.HEAD {
+        display: none;
+    }
+
+    .formbtnnew.trash1 {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.trash1 {
+        display: none;
+    }
 
 }

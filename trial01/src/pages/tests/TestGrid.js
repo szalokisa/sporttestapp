@@ -141,12 +141,17 @@ export default function TestGrid(props) {
         resizable: true,
     }));
 
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
     const cellClickedListener = useCallback(event => {
         props.biRef.HeadGridShowDataChildFromParent({ myID: event.data.ID });
         props.biRef.HeadGridSetParentID({ myID: event.data.ID });
         // props.biRef.HeadGridSetParentName({ myName: event.data.TestName });
         if (event.colDef.field === 'btsave') {
-            SaveData(event.data);
+            stopEditing();
+            // SaveData(event.data);
         }
     }, []);
 
@@ -154,14 +159,23 @@ export default function TestGrid(props) {
         ShowData();
     }
 
+    const onRowValueChanged = useCallback((event) => {
+        props.setView("HEAD")
+        SaveData(event.data);
+    }, []);
+
+    const onRowEditingStarted = useCallback((event) => {
+        props.setView("EDITING")
+    }, []);
+
+    const onRowEditingStopped = useCallback((event) => {
+        props.setView("HEAD")
+    }, []);
+
     props.biRef.childGridClosed = _FnRefreshGrid;
 
     useEffect(() => {
         ShowData();
-    }, []);
-
-    const onCellValueChanged = useCallback((event) => {
-        // SaveData(event.data);
     }, []);
 
     async function SaveData(saveprops) {
@@ -173,7 +187,7 @@ export default function TestGrid(props) {
                 ID: recID,
                 Data: saveprops,
                 Identifier: 'STT_HEAD',
-                token: props.token,
+                token: props.loginData.token,
             }
         })
             .then((result) => {
@@ -238,7 +252,7 @@ export default function TestGrid(props) {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.token,
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
@@ -248,7 +262,7 @@ export default function TestGrid(props) {
                 where: '',
                 groupby: '',
                 orderby: 'ID DESC',
-                token: props.token,
+                token: props.loginData.token,
             },
         })
             .then((data) => {
@@ -270,7 +284,15 @@ export default function TestGrid(props) {
     return (<div className="TestGrid">
         <div class='row'>
             <div class="col-md-4">
-                <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+            <div className={`formbtnnew ${props.view}`}>
+                    <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
+                <div className={`formbtnnewplaceholder ${props.view}`}>
+                    <button type='button'
+                        className='btn btn-secondary'
+                        disabled='true'
+                        onClick={() => addItem(undefined)}>Új adat</button>
+                </div>
             </div>
             <div class="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
@@ -293,9 +315,13 @@ export default function TestGrid(props) {
                     columnDefs={columnDefs}
                     getRowId={getRowId}
                     defaultColDef={defaultColDef}
-                    animateRows={true}
-                    onCellValueChanged={onCellValueChanged}
+                    editType={'fullRow'}
+                    onRowValueChanged={onRowValueChanged}
+                    onRowEditingStarted={onRowEditingStarted}
+                    onRowEditingStopped={onRowEditingStopped}
                     onCellClicked={cellClickedListener}
+
+                    // onCellValueChanged={onCellValueChanged}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>

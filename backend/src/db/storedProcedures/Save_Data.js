@@ -2,7 +2,6 @@ import { StoredProcedure } from '@selesterkft/sel-db';
 import { db } from '../dbConnection';
 
 export async function Save_Data(queryParams) {
-    console.log('+++ Save_Data.js (line: 5)', queryParams);
     const storedProcedure = new StoredProcedure('Save_Data')
     storedProcedure.addParam('ID', 'int', queryParams.ID);
     storedProcedure.addParam('Identifier', 'NVarChar', queryParams.Identifier, { length: '250' });
@@ -15,7 +14,6 @@ export async function Save_Data(queryParams) {
         error.status = sqlResult.output.OUT_HTTP_Code;
         throw error;
     }
-    console.log('+++ Save_Data.js (line: 18)', sqlResult);
     return {
         columns: sqlResult.columns,
         data: sqlResult.recordset,

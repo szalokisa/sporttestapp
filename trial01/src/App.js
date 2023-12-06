@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import './App.scss';
 import Navbar from './components/navbar/Navbar';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import StartPage from './pages/startpage/startPage';
-import LoginPage from './pages/login/loginPage';
+import Header from './components/header/Header';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import LoginData from './components/LoginData';
+import PageLogin from './pages/login/PageLogin';
 import ExercisesPage from './pages/exercises/ExercisesPage';
 import Proba from './pages/proba/proba';
 import SportAbilitiesPage from './pages/sportabilities/SportAbilitiesPage';
@@ -14,110 +15,151 @@ import TestPage from './pages/tests/TestPage';
 
 function App() {
   const [language, setLanguage] = useState('hu');
-  const [token, setToken] = useState();
+  const [loginData, setLoginData] = useState(null);
+
   const [sportAbilitiesComboData, setSportAbilitiesComboData] = useState();
+  const [unitComboData, setUnitComboData] = useState();
   const [gendersComboData, setGendersComboData] = useState();
   const [organisationsComboData, setOrganisationsComboData] = useState();
-  const [unitComboData, setUnitComboData] = useState();
   const [exercisesComboData, setExercisesComboData] = useState();
   const [personsComboData, setpersonsComboData] = useState();
   const [testTemplatesComboData, settestTemplatesComboData] = useState();
 
-  return (
-    <div className="App">
+  function onLanguageChanged(newLanguage) {
+    setLanguage(newLanguage);
+  }
+
+  function onLogout() {
+    setLoginData(null);
+  }
+
+  function onExtendToken(newToken) {
+    if (!newToken) {
+      onLogout();
+      return;
+    }
+    let newLogin = new LoginData(newToken);
+    setLoginData(newLogin);
+  }
+
+  function onLogin(newLoginData) {
+    setLoginData(newLoginData);
+  }
+
+  function setActivity() {
+    if (loginData) {
+      loginData.setLastActivity();
+    }
+  }
+
+  if (!loginData) {
+    return (
       <BrowserRouter>
-        <header className="App-header">
+        <Header
+          language={language}
+          onLanguageChanged={(newLanguage) => onLanguageChanged(newLanguage)}
+          loginData={loginData}
+          onExtendToken={(newToken) => onExtendToken(newToken)}
+          onLogout={onLogout}
+        />
+
+        <Routes>
+          <Route path="/login" element={
+            <PageLogin
+              language={language}
+              onLogin={(newLogin) => onLogin(newLogin)}
+              setSportAbilitiesComboData={setSportAbilitiesComboData}
+              setUnitComboData={setUnitComboData}
+              setGendersComboData={setGendersComboData}
+              setOrganisationsComboData={setOrganisationsComboData}
+              setExercisesComboData={setExercisesComboData}
+              setpersonsComboData={setpersonsComboData}
+              settestTemplatesComboData={settestTemplatesComboData}
+            />
+          } />
+
+          <Route
+            path="*"
+            element={<Navigate to="/login" replace />}
+          />
+        </Routes>
+      </BrowserRouter>
+    )
+  }
+
+  return (
+    <div className="App" onMouseDown={setActivity} onKeyDown={setActivity}>
+      <BrowserRouter>
+        <Header
+          language={language}
+          onLanguageChanged={(newLanguage) => onLanguageChanged(newLanguage)}
+          loginData={loginData}
+          onExtendToken={(newToken) => onExtendToken(newToken)}
+          onLogout={onLogout}
+        />
+        <Fragment>
           <div className='navbar-area'>
-            <Navbar />
+            <Navbar
+              language={language}
+              loginData={loginData}
+            />
           </div>
-        </header>
-        <div className='App-body'>
-          <Routes>
-            <Route path="/" element={
-              <StartPage
-                language={language}
-                setToken={setToken}
-              />
-            } />
-            <Route path="/login" element={
-              <LoginPage
-                language={language}
-                setToken={setToken}
-                token={token}
-                setSportAbilitiesComboData={setSportAbilitiesComboData}
-                setUnitComboData={setUnitComboData}
-                setOrganisationsComboData={setOrganisationsComboData}
-                setGendersComboData={setGendersComboData}
-                setExercisesComboData={setExercisesComboData}
-                setpersonsComboData={setpersonsComboData}
-                settestTemplatesComboData={settestTemplatesComboData}
-              />
-            } />
-            <Route path="/logout" element={
-              <StartPage
-                language={language}
-                setToken={setToken}
-              />
-            } />
-            <Route path="/exercises" element={
-              <ExercisesPage
-                language={language}
-                setToken={setToken}
-                token={token}
-                sportAbilitiesComboData={sportAbilitiesComboData}
-                unitComboData={unitComboData}
-              />
-            } />
-            <Route path="/sportabilities" element={
-              <SportAbilitiesPage
-                language={language}
-                setToken={setToken}
-                token={token}
-                sportAbilitiesComboData={sportAbilitiesComboData}
-                unitComboData={unitComboData}
-              />
-            } />
-            <Route path="/persons" element={
-              <PersonsPage
-                language={language}
-                setToken={setToken}
-                token={token}
-                gendersComboData={gendersComboData}
-                organisationsComboData={organisationsComboData}
-                unitComboData={unitComboData}
+          <div className='App-body'>
+            <Routes>
+              <Route path="/exercises" element={
+                <ExercisesPage
+                  language={language}
+                  loginData={loginData}
+                  sportAbilitiesComboData={sportAbilitiesComboData}
+                  unitComboData={unitComboData}
                 />
-            } />
-            <Route path="/organisations" element={
-              <OrganisationsPage
-                language={language}
-                setToken={setToken}
-                token={token}
-              />
-            } />
-            <Route path="/testtemplates" element={
-              <TestTemplatesPage
-                language={language}
-                setToken={setToken}
-                exercisesComboData={exercisesComboData}
-                token={token}
+              } />
+              <Route path="/sportabilities" element={
+                <SportAbilitiesPage
+                  language={language}
+                  loginData={loginData}
+                  sportAbilitiesComboData={sportAbilitiesComboData}
+                  unitComboData={unitComboData}
                 />
-            } />
-            <Route path="/tests" element={
-              <TestPage
-                language={language}
-                setToken={setToken}
-                personsComboData={personsComboData}
-                testTemplatesComboData={testTemplatesComboData}
-                token={token}
+              } />
+              <Route path="/persons" element={
+                <PersonsPage
+                  language={language}
+                  gendersComboData={gendersComboData}
+                  loginData={loginData}
+                  organisationsComboData={organisationsComboData}
+                  unitComboData={unitComboData}
                 />
-            } />
-            <Route path="/proba" element={
-              <Proba
-                language={language}
-              />
-            } />
-          </Routes>
-        </div>
+              } />
+              <Route path="/organisations" element={
+                <OrganisationsPage
+                  language={language}
+                  loginData={loginData}
+                />
+              } />
+              <Route path="/testtemplates" element={
+                <TestTemplatesPage
+                  language={language}
+                  loginData={loginData}
+                  exercisesComboData={exercisesComboData}
+                />
+              } />
+              <Route path="/tests" element={
+                <TestPage
+                  language={language}
+                  loginData={loginData}
+                  personsComboData={personsComboData}
+                  testTemplatesComboData={testTemplatesComboData}
+                />
+              } />
+              <Route path="/proba" element={
+                <Proba
+                  language={language}
+                />
+              } />
+            </Routes>
+          </div>
+        </Fragment>
       </BrowserRouter>
     </div>
   );

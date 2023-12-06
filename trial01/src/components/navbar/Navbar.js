@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import './Navbar.scss';
 import { NavLink } from 'react-router-dom';
 import { List as HamMenuIcon } from 'react-bootstrap-icons';
@@ -16,43 +16,38 @@ export default function Navbar() {
 
     return (
         <nav className="main-navbar">
-            <div id="main-navbar-ham" onClick={changeHamMenu}>
-                <HamMenuIcon />
-            </div>
+            <Fragment>
 
-            <div id="main-menu" className={hamMenu}>
-                <ul className="top-level">
-                    <li>
-                        <NavLink to="/sportabilities" onClick={closeHamMenu}>Képességek</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/exercises" onClick={closeHamMenu}>Gyakorlatok</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/organisations" onClick={closeHamMenu}>Szervezetek</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/persons" onClick={closeHamMenu}>Sportolók</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/testtemplates" onClick={closeHamMenu}>Teszt sablonok</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/tests" onClick={closeHamMenu}>Tesztek</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/proba" onClick={closeHamMenu}>Statisztikák</NavLink>
-                    </li>
-                </ul>
-                <ul className="top-level">
-                    <li>
-                        <NavLink to="/login" onClick={closeHamMenu}>Login</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/logout" onClick={closeHamMenu}>Logout</NavLink>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                <div id="main-navbar-ham" onClick={changeHamMenu}>
+                    <HamMenuIcon />
+                </div>
+
+                <div id="main-menu" className={hamMenu}>
+                    <ul className="top-level">
+                        <li>
+                            <NavLink to="/sportabilities" onClick={closeHamMenu}>Képességek</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/exercises" onClick={closeHamMenu}>Gyakorlatok</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/organisations" onClick={closeHamMenu}>Szervezetek</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/persons" onClick={closeHamMenu}>Sportolók</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/testtemplates" onClick={closeHamMenu}>Teszt sablonok</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/tests" onClick={closeHamMenu}>Tesztek</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/proba" onClick={closeHamMenu}>Statisztikák</NavLink>
+                        </li>
+                    </ul>
+                </div>
+            </Fragment>
+        </nav >
     )
 }

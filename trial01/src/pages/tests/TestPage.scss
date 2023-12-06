@@ -86,5 +86,54 @@
         display: none;
     }
 
+    .grid2.EDITING {
+        display: none;
+    }
+
+    .grid3.EDITING {
+        display: none;
+    }
+
+    .grid1.CHILDEDITING {
+        display: none;
+    }
+
+    .grid3.CHILDEDITING {
+        display: none;
+    }
+
+    
+    .formbtndel2.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.EDITING {
+        display: none;
+    }
+
+    .formbtndel1.EDITING {
+        display: none;
+    }
+
+    .formbtndel1.CHILDEDITING {
+        display: none;
+    }
+
+    .formbtndel2.CHILDEDITING {
+        display: none;
+    }
+
+    .formbtncancel.EDITING {
+        display: none;
+    }
+    
+    .formbtncancel.CHILDEDITING {
+        display: none;
+    }
+    
+    .formbtnnewplaceholder.HEAD {
+        display: none;
+    }
+
 
 }

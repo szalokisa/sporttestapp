@@ -10,7 +10,15 @@
         display: none;
     }
 
+    .grid2.EDITING {
+        display: none;
+    }
+
     .grid1.CHILD {
+        display: none;
+    }
+  
+    .grid1.CHILDEDITING {
         display: none;
     }
   
@@ -26,6 +34,34 @@
         display: none;
     }
 
+    .formbtndel2.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.trash1 {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.HEAD {
+        display: none;
+    }
+
+    .formbtndel1.EDITING {
+        display: none;
+    }
+
+    .formbtndel1.CHILDEDITING {
+        display: none;
+    }
+
+    .formbtndel2.CHILDEDITING {
+        display: none;
+    }
+
     .formbtndel1.trash1 {
         display: none;
     }
@@ -38,9 +74,19 @@
         display: none;
     }
 
-    .formbtncancel.CHILD {
+    .formbtncancel.HEAD {
         display: none;
     }
 
-
+    .formbtncancel.EDITING {
+        display: none;
+    }
+    
+    .formbtncancel.CHILDEDITING {
+        display: none;
+    }
+    
+    .formbtncancel.CHILD{
+        display: none;
+    }
 }

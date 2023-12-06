@@ -1,0 +1,14 @@
+.table-select-controls {
+    display: flex;
+    .table-select-input-area {
+        width: calc(100% - 48px);
+    }
+    .btn {
+        width: 48px;
+        height: 39px;
+    }
+}
+.table-select-table-area {
+    height: 30vh;
+    min-height: 320px;
+}

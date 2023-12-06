@@ -1,0 +1,25 @@
+.date-time-picker {
+    .date-time-picker-input-area {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .date-time-picker-input-date {
+        width: 80%;
+        min-width: 9rem;
+        input {
+            height: 40px;
+        }
+    }
+    .date-time-picker-input-time {
+        width: 10%;
+        min-width: 6rem;
+        height: 2.5rem;
+    }
+    .date-time-picker-input-zone {
+        width: 10%;
+        min-width: 7rem;
+        height: 2.5rem;
+    }
+}

@@ -6,7 +6,7 @@ export default async function ComboData(props) {
     await axios.put(comboDataURL, {
         header: {
             'Content-Type': 'application/json',
-            token: props.token,
+            token: props.loginData.token,
             from: props.from,
             select: props.select,
             language: props.language,

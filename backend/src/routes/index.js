@@ -8,10 +8,13 @@ import combodataRouter from './combodata.routes';
 import gridcombodataRouter from './gridcombodata.routes';
 import sportabilitiesRouter from './sportabilities.routes';
 import exercisesRouter from './exercises.routes';
-import subgriddataRouter from './subgriddata.routes';
+// import subgriddataRouter from './subgriddata.routes';
 import delrecRouter from './delrec.routes';
 import sttlinestoheadRouter from './sttlinestohead.routes';
+import tokenRouter from './tokenRouter';
 
+
+// export {default as tokenRouter} from './tokenRouter';
 export const api = apiRouter;
 export const docs = docsRouter;
 export const data = dataRouter;
@@ -22,6 +25,7 @@ export const combodata = combodataRouter;
 export const gridcombodata = gridcombodataRouter;
 export const sportabilities = sportabilitiesRouter;
 export const exercises = exercisesRouter;
-export const subgriddata = subgriddataRouter;
+// export const subgriddata = subgriddataRouter;
+export const token = tokenRouter;
 export const delrec = delrecRouter;
 export const sttlinestohead = sttlinestoheadRouter;

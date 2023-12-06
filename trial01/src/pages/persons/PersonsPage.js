@@ -7,14 +7,14 @@ import './PersonsPage.scss';
 function PersonsPage(props) {
     const [view, setView] = useState('HEAD');
 
-    return <main className="page-exercises">
+    return <main className="page-persons">
         <TitleBar title='Sportolók' />
         {
             <div className={`grid1 ${view}`}>
                 <PersonsGrid
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    token={props.token}
+                    loginData={props.loginData}
                     setView={setView}
                     organisationsComboData={props.organisationsComboData}
                     gendersComboData={props.gendersComboData}

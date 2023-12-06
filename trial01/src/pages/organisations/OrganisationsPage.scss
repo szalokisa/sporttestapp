@@ -1,6 +1,19 @@
 @import '../../App.scss';
 
-.page-exercises {
+.cell-pass {
+    text-align: center;
+    font-weight: bold;
+    color: #6bba6d;
+}
+
+.cell-fail {
+    text-align: center;
+    font-weight: bold;
+    background-color: #6e100a;
+}
+
+
+.page-organisations {
 
     .grid2.HEAD {
         display: none;
@@ -13,7 +26,7 @@
     .grid1.CHILD {
         display: none;
     }
-  
+
     .grid1.childtrash1 {
         display: none;
     }
@@ -42,5 +55,32 @@
         display: none;
     }
 
+    .formbtndel1.EDITING {
+        display: none;
+    }
+
+    .formbtndel2.EDITING {
+        display: none;
+    }
+
+    .formbtncancel.EDITING {
+        display: none;
+    }
+
+    .formbtnnew.EDITING {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.HEAD {
+        display: none;
+    }
+
+    .formbtnnew.trash1 {
+        display: none;
+    }
+
+    .formbtnnewplaceholder.trash1 {
+        display: none;
+    }
 
 }

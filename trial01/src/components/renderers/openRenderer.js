@@ -1,9 +1,9 @@
 import React from 'react';
+import subformicon from "../icons/subform.svg"
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
     const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
-
     const buttonClicked = () => {
         if (props.form === 'Child1') {
             props.setView('CHILD');
@@ -16,7 +16,20 @@ export default (props) => {
     return (
         <span>
             <span>{cellValue}</span>&nbsp;
-            <button onClick={() => buttonClicked()}>...</button>
+            <img
+                className='pencilIcon'
+                src={subformicon}
+                onClick={() => buttonClicked()}
+                alt="pencil"
+            />
+
         </span>
     );
+
+    // return (
+    //     <span>
+    //         <span>{cellValue}</span>&nbsp;
+    //         <button onClick={() => buttonClicked()}>...</button>
+    //     </span>
+    // );
 };

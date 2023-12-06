@@ -1,0 +1,17 @@
+.login-form {
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .button-area {
+    display: flex;
+    justify-content: center;
+
+    button[type="submit"] {
+      letter-spacing: 1px;
+    }
+  }
+}
