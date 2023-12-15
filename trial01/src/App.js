@@ -12,6 +12,7 @@ import OrganisationsPage from './pages/organisations/OrganisationsPage';
 import PersonsPage from './pages/persons/PersonsPage';
 import TestTemplatesPage from './pages/testtemplates/TestTemplatesPage';
 import TestPage from './pages/tests/TestPage';
+import Statistics from './pages/statistics/pageStatistics';
 
 function App() {
   const [language, setLanguage] = useState('hu');
@@ -152,8 +153,8 @@ function App() {
                   testTemplatesComboData={testTemplatesComboData}
                 />
               } />
-              <Route path="/proba" element={
-                <Proba
+              <Route path="/statistics" element={
+                <Statistics
                   language={language}
                 />
               } />

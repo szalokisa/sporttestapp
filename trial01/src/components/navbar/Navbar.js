@@ -43,7 +43,7 @@ export default function Navbar() {
                             <NavLink to="/tests" onClick={closeHamMenu}>Tesztek</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/proba" onClick={closeHamMenu}>Statisztikák</NavLink>
+                            <NavLink to="/statistics" onClick={closeHamMenu}>Statisztikák</NavLink>
                         </li>
                     </ul>
                 </div>
