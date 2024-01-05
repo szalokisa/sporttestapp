@@ -63,7 +63,7 @@ export const statParams = {
         },
     ],
     groupBy: '',
-    orderBy: 'Message_Date',
+    orderBy: 'DT, TestTemplatesName, PersonName',
     top: 1000,
     rowCountPerPage: 50,
     selectedFilters: [
@@ -74,6 +74,7 @@ export const statParams = {
         "ExerciseName",
     ],
     selectedColumns: [
+        "TLID",
         "PLACE",
         "DT",
         "HREMARK",

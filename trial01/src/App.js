@@ -119,8 +119,8 @@ function App() {
                 <SportAbilitiesPage
                   language={language}
                   loginData={loginData}
-                  sportAbilitiesComboData={sportAbilitiesComboData}
-                  unitComboData={unitComboData}
+                // sportAbilitiesComboData={sportAbilitiesComboData}
+                // unitComboData={unitComboData}
                 />
               } />
               <Route path="/persons" element={
@@ -129,7 +129,6 @@ function App() {
                   gendersComboData={gendersComboData}
                   loginData={loginData}
                   organisationsComboData={organisationsComboData}
-                  unitComboData={unitComboData}
                 />
               } />
               <Route path="/organisations" element={
@@ -156,6 +155,7 @@ function App() {
               <Route path="/statistics" element={
                 <Statistics
                   language={language}
+                  loginData={loginData}
                 />
               } />
             </Routes>

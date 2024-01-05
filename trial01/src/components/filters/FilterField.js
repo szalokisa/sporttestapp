@@ -1,6 +1,5 @@
 import LanguageElementsHandler from '../../components/LanguageElementsHandler'
 export default function FilterField(props) {
-  console.log('+++ FilterField.js (line: 3)', props);
   const languageElementsHandler = new LanguageElementsHandler(
     props.languageElements,
     props.language,

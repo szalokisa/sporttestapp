@@ -3,18 +3,15 @@
 import FilterField from './FilterField';
 
 export default function Filters(props) {
-  console.log('+++ Filters.js (line: 6)', props);
   const selectedFilters = props?.reportParams?.selectedFilters;
   if (!selectedFilters) {
     return <></>;
   }
 
   const filters = selectedFilters.map((fieldName) => {
-    console.log('+++ Filters.js (line: 13)', fieldName);
     const column = props.reportParams.columns.find(
       (col) => col.field === fieldName,
     );
-    console.log('+++ Filters.js (line: 17)',column);
     const filterField = {
       fieldName,
       filterType: column.type,

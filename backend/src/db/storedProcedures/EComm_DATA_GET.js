@@ -2,6 +2,7 @@ import { StoredProcedure } from '@selesterkft/sel-db';
 import { db, sqlConfig } from '../dbConnection';
 
 export async function EComm_DATA_GET(queryParams) {
+  console.log('+++ EComm_DATA_GET.js (line: 5)', queryParams);
   db.initiateConnection(sqlConfig);
   const storedProcedure = new StoredProcedure('EComm_DATA_GET')
   const sqlTop = queryParams.top ?? 0;
@@ -10,6 +11,7 @@ export async function EComm_DATA_GET(queryParams) {
     'NVarChar',
     queryParams.sqlWhereQuery
   );
+
   storedProcedure.addParam('SELECT', 'NVarChar', queryParams.select, { length: 'max' });
   storedProcedure.addParam('TOP', 'Int', sqlTop);
   storedProcedure.addParam('FROM', 'NVarChar', queryParams.from, { length: 'max' });
@@ -22,6 +24,7 @@ export async function EComm_DATA_GET(queryParams) {
   storedProcedure.addOutputParam('OUT_HTTP_Code', 'Int');
   storedProcedure.addOutputParam('OUT_HTTP_Message', 'NVarChar', '', { length: 'max' });
   const sqlResult = await db.callSP(storedProcedure);
+  console.log('+++ EComm_DATA_GET.js (line: 26)', sqlResult);
   if (sqlResult.output.OUT_HTTP_Code !== 200) {
     const error = new Error(sqlResult.output.OUT_HTTP_Message);
     error.status = sqlResult.output.OUT_HTTP_Code;
