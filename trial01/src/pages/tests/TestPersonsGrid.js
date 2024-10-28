@@ -4,7 +4,6 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
 import saveRenderer from '../../components/renderers/saveRenderer'
-// import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 const TestPersonsURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
@@ -13,10 +12,7 @@ export default function TestPersonsGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [parentID, setParentID] = useState(0);
-    // const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
-    // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-
     const getRowId = useCallback(function (params) {
         return params.data.ID;
     }, []);
@@ -40,7 +36,7 @@ export default function TestPersonsGrid(props) {
             cellEditor: 'agSelectCellEditor',
             wrapText: true,
             cellEditorParams: {
-                values: props.personsComboData.data
+                values: props.personsComboData
             },
             filter: true,
             editable: true
@@ -89,15 +85,10 @@ export default function TestPersonsGrid(props) {
 
     props.biRef.child1ShowDataChild = ShowDataChild;
     props.biRef.child1SetParID = SetParID;
-    // props.biRef.childSetParName = SetParName;
 
     function SetParID(pr) {
         setParentID(pr.myID)
     }
-
-    // function SetParName(pr) {
-    //     setParentName(pr.myName)
-    // }
 
     function closeMe() {
         props.setView("HEAD");
@@ -196,11 +187,6 @@ export default function TestPersonsGrid(props) {
         props.setView("CHILD")
     }, []);
 
-
-    // const onCellValueChanged = useCallback((event) => {
-    //     // ellenorzesek
-    // }, []);
-
     function delRow1() {
         props.setView("childtrash1")
     }
@@ -226,11 +212,11 @@ export default function TestPersonsGrid(props) {
     return (<div className="TestPersonsGrid">
         <h2>Sportolók / {parentID} </h2>
         <div className='row'>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
                 <button type='button' className='btn btn-close' onClick={closeMe}></button>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -238,7 +224,7 @@ export default function TestPersonsGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>
@@ -251,7 +237,6 @@ export default function TestPersonsGrid(props) {
                 getRowId={getRowId}
                 defaultColDef={defaultColDef}
                 animateRows={true}
-                // onCellValueChanged={onCellValueChanged}
                 editType={'fullRow'}
                 onRowValueChanged={onRowValueChanged}
                 onRowEditingStarted={onRowEditingStarted}

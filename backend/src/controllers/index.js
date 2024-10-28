@@ -2,7 +2,6 @@ export * from './heartbeat';
 export * from './dataController';
 export * from './usersController';
 export * from './personsController';
-export * from './organisationsController';
 export * from './combodataController';
 export * from './sportabilitiesController';
 export * from './exercisesController';

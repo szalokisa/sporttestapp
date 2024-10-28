@@ -18,6 +18,7 @@ function PersonsPage(props) {
                     setView={setView}
                     organisationsComboData={props.organisationsComboData}
                     gendersComboData={props.gendersComboData}
+                    setpersonsComboData={props.setpersonsComboData}
                     view={view}
                 />
             </div>

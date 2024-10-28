@@ -3,8 +3,7 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
-import saveRenderer from '../../components/renderers/saveRenderer'
-// import { setSelectionRange } from '@testing-library/user-event/dist/utils';
+// import saveRenderer from '../../components/renderers/saveRenderer'
 
 const TestLinesURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
@@ -17,7 +16,6 @@ export default function TestLinesGrid(props) {
     const [parentName, setParentName] = useState(0);
     const pID = useRef(0);
     // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-
     const getRowId = useCallback(function (params) {
         return params.data.ID;
     }, []);
@@ -81,13 +79,6 @@ export default function TestLinesGrid(props) {
             filter: true,
             editable: true
         },
-        // {
-        //     field: 'btaddlines',
-        //     width: 70,
-        //     resizable: false,
-        //     headerName: 'save',
-        //     cellRenderer: saveRenderer,
-        // },
     ]);
 
     const defaultColDef = useMemo(() => ({
@@ -99,32 +90,27 @@ export default function TestLinesGrid(props) {
         AddLines();
     };
 
-    function createNewRowData() {
-        const newData = {
-            ID: 0,
-            STT_HEAD_ID: 0,
-            PersonName: '---',
-            SportAbilityName: '---',
-            ExerciseName: '---',
-            ResultTypeDescription: '---',
-            RESULT: '---',
-            UnitName: '---',
-            REMARK: '---',
-        };
-        return newData;
-    }
+    // function createNewRowData() {
+    //     const newData = {
+    //         ID: 0,
+    //         STT_HEAD_ID: 0,
+    //         PersonName: '---',
+    //         SportAbilityName: '---',
+    //         ExerciseName: '---',
+    //         ResultTypeDescription: '---',
+    //         RESULT: '---',
+    //         UnitName: '---',
+    //         REMARK: '---',
+    //     };
+    //     return newData;
+    // }
 
     props.biRef.child2ShowDataChild = ShowDataChild;
     props.biRef.child2SetParID = SetParID;
-    // props.biRef.childSetParName = SetParName;
 
     function SetParID(pr) {
         setParentID(pr.myID)
     }
-
-    // function SetParName(pr) {
-    //     setParentName(pr.myName)
-    // }
 
     function closeMe() {
         props.setView("HEAD");
@@ -246,11 +232,11 @@ export default function TestLinesGrid(props) {
     return (<div className="TestLinesGrid">
         <h2>Mért eredmények / {parentID} </h2>
         <div className='row'>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Mérési adatok felvétele</button>
                 <button type='button' className='btn btn-close' onClick={closeMe}></button>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -258,7 +244,7 @@ export default function TestLinesGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>

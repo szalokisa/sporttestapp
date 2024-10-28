@@ -6,8 +6,8 @@ import axios from 'axios';
 import { validators } from '../../components/validators/validators';
 import saveRenderer from '../../components/renderers/saveRenderer'
 
-const SportAbilitiesURL = `${process.env.REACT_APP_API_BASE_URL}/sportabilities`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
+const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 
 export default function SportabilitiesGrid(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -90,16 +90,20 @@ export default function SportabilitiesGrid(props) {
     async function SaveData(saveprops) {
         let recID = 0;
         if (saveprops.ID) { recID = saveprops.ID }
-        axios.put(SportAbilitiesURL, {
+        axios.put(DataURL, {
+            token: props.loginData.token,
             headers: {
                 'Content-Type': 'application/json',
                 ID: recID,
-                SportAbilityName: saveprops.SportAbilityName,
-                Remark: saveprops.Remark,
+                Data: saveprops,
+                Identifier: 'SportAbilities',
+                comboidentifier: 'SportAbilities',
+                with0: 'true'
             }
         })
-            .then((result) => {
-                ShowData();
+            .then(async (result) => {
+                await ShowData();
+                await props.setSportAbilitiesComboData(result.data.combodata.data);
                 return;
             })
             .catch((err) => {
@@ -149,7 +153,7 @@ export default function SportabilitiesGrid(props) {
         props.setView("HEAD")
     }
 
-    function ShowData() {
+    async function ShowData() {
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
             mode: 'cors',
@@ -192,7 +196,7 @@ export default function SportabilitiesGrid(props) {
                 <div className={`formbtnnewplaceholder ${props.view}`}>
                     <button type='button'
                         className='btn btn-secondary'
-                        disabled='true'
+                        disabled={true}
                         onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
             </div>

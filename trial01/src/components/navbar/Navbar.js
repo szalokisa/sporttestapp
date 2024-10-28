@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { List as HamMenuIcon } from 'react-bootstrap-icons';
 
 export default function Navbar() {
+    console.log('!!!SSS Navbar.js (line: 7)');
     const [hamMenu, setHamMenu] = useState('CLOSED')
 
     function closeHamMenu() {

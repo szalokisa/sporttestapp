@@ -9,12 +9,8 @@ import {
     , data
     , users
     , token
-    , persons
-    , organisations
     , combodata
     , sportabilities
-    , exercises
-    // , subgriddata
     , gridcombodata
     , delrec
     , sttlinestohead
@@ -30,12 +26,9 @@ app.use('/api-docs', docs);
 app.use('/data', data);
 app.use("/token", token);
 app.use('/users', users);
-app.use('/persons', persons);
-app.use('/organisations', organisations);
 app.use('/combodata', combodata);
 app.use('/gridcombodata', gridcombodata);
 app.use('/sportabilities', sportabilities);
-app.use('/exercises', exercises);
 app.use('/deleterec', delrec);
 app.use('/sttlinestohead', sttlinestohead);
 

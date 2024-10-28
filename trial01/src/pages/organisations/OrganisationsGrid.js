@@ -193,19 +193,19 @@ export default function OrganisationsGrid(props) {
     }
 
     return (<div className="OrganisationsGrid">
-        <div class='row'>
-            <div class="col-md-4">
+        <div className='row'>
+            <div className="col-md-4">
                 <div className={`formbtnnew ${props.view}`}>
                     <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
                 <div className={`formbtnnewplaceholder ${props.view}`}>
                     <button type='button'
                         className='btn btn-secondary'
-                        disabled='true'
+                        disabled={true}
                         onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -213,13 +213,13 @@ export default function OrganisationsGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div className="row">
             <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}

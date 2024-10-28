@@ -5,6 +5,7 @@ import { statParams } from './statParams';
 import { languageElements } from './statLanguageElements';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import ExcelExport from '../../components/excelExport/ExcelExport';
+import Chart01 from './chart01';
 
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 
@@ -239,11 +240,11 @@ function PageStatistics(props) {
                             Adatok
                         </button>
                     </h2>
-                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                    <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                         <div className="accordion-body">
                             <ExcelExport data={rowData} />
                             <strong>
-                                <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 400 }}>
+                                <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 600 }}>
                                     <AgGridReact ref={gridRef}
                                         rowData={rowData}
                                         columnDefs={columnDefs}
@@ -263,11 +264,9 @@ function PageStatistics(props) {
                             Statisztikák
                         </button>
                     </h2>
-                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                    <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                         <div className="accordion-body">
-                            <strong>
-                                Statisztikák
-                            </strong>
+                            <Chart01 data={rowData}></Chart01>
                         </div>
                     </div>
                 </div>

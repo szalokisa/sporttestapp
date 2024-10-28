@@ -131,10 +131,13 @@ export default function PersonsGrid(props) {
                 ID: recID,
                 Data: saveprops,
                 Identifier: 'Persons',
+                comboidentifier: 'Persons',
+                with0: 'true'
             }
         })
-            .then((result) => {
-                ShowData();
+            .then(async (result) => {
+                await ShowData();
+                await props.setpersonsComboData(result.data.combodata.data);
                 return;
             })
             .catch((err) => {
@@ -170,13 +173,19 @@ export default function PersonsGrid(props) {
         props.setView("trash1")
     }
 
-    function delRow2() {
+    async function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
         axios.delete(DeleteRecordURL, {
-            headers: { data: deletedIds, datatable: "Persons" }
-        }).then(() => {
-            ShowData()
+            headers: {
+                data: deletedIds,
+                datatable: "Persons",
+                comboidentifier: "Persons"
+            }
+        }).then(async (result) => {
+            await ShowData()
+            await props.setpersonsComboData(result.data.combodata.data);
+            return;
         }).catch((err) => {
             console.error(err);
         })
@@ -188,7 +197,7 @@ export default function PersonsGrid(props) {
         props.setView("HEAD")
     }
 
-    function ShowData() {
+    async function ShowData() {
         fetch(`${props.dataEndpoint}`, {
             method: 'GET',
             mode: 'cors',
@@ -223,19 +232,19 @@ export default function PersonsGrid(props) {
     }
 
     return (<div className="PersonsGrid">
-        <div class='row'>
-            <div class="col-md-4">
+        <div className='row'>
+            <div className="col-md-4">
                 <div className={`formbtnnew ${props.view}`}>
                     <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
                 <div className={`formbtnnewplaceholder ${props.view}`}>
                     <button type='button'
                         className='btn btn-secondary'
-                        disabled='true'
+                        disabled={true}
                         onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -243,13 +252,13 @@ export default function PersonsGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div className="row">
             <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}

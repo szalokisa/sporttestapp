@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginData from './components/LoginData';
 import PageLogin from './pages/login/PageLogin';
 import ExercisesPage from './pages/exercises/ExercisesPage';
-import Proba from './pages/proba/proba';
 import SportAbilitiesPage from './pages/sportabilities/SportAbilitiesPage';
 import OrganisationsPage from './pages/organisations/OrganisationsPage';
 import PersonsPage from './pages/persons/PersonsPage';
@@ -119,8 +118,7 @@ function App() {
                 <SportAbilitiesPage
                   language={language}
                   loginData={loginData}
-                // sportAbilitiesComboData={sportAbilitiesComboData}
-                // unitComboData={unitComboData}
+                  setSportAbilitiesComboData={setSportAbilitiesComboData}
                 />
               } />
               <Route path="/persons" element={
@@ -129,7 +127,8 @@ function App() {
                   gendersComboData={gendersComboData}
                   loginData={loginData}
                   organisationsComboData={organisationsComboData}
-                />
+                  setpersonsComboData={setpersonsComboData}
+                  />
               } />
               <Route path="/organisations" element={
                 <OrganisationsPage

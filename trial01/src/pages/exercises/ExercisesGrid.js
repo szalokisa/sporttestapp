@@ -7,7 +7,6 @@ import saveRenderer from '../../components/renderers/saveRenderer'
 import axios from 'axios';
 import { validators } from '../../components/validators/validators';
 
-// const ExercisesURL = `${process.env.REACT_APP_API_BASE_URL}/exercises`;
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
@@ -54,7 +53,7 @@ export default function ExercisesGrid(props) {
             cellEditorPopup: false,
             cellEditor: 'agSelectCellEditor',
             cellEditorParams: {
-                values: props.sportAbilitiesComboData.data
+                values: props.sportAbilitiesComboData
             },
             cellStyle: params => {
                 const invalid = validators.validate('required', params.value, props.language)
@@ -244,7 +243,7 @@ export default function ExercisesGrid(props) {
                 <div className={`formbtnnewplaceholder ${props.view}`}>
                     <button type='button'
                         className='btn btn-secondary'
-                        disabled='true'
+                        disabled={true}
                         onClick={() => addItem(undefined)}>Új adat</button>
                 </div>
             </div>

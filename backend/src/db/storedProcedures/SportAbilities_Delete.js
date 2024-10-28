@@ -2,7 +2,6 @@ import { StoredProcedure } from '@selesterkft/sel-db';
 import { db } from '../dbConnection';
 
 export async function SportAbilities_Delete(queryParams) {
-    console.log('+++ SportAbilities_Delete.js (line: 5)');
     const storedProcedure = new StoredProcedure('sss_SportAbilities_Delete')
     storedProcedure.addParam('id', 'int', queryParams.id);
     storedProcedure.addOutputParam('out_http_code', 'int');

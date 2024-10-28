@@ -100,12 +100,12 @@ export default function PageLogin(props) {
         const exercisesComboData = await GridComboData(comboExercisesProps);
         const personsComboData = await GridComboData(comboPersonsProps);
         const testTemplatesComboData = await GridComboData(combotestTemplatesProps);
-        props.setSportAbilitiesComboData(sportAbilitiesComboData);
+        props.setSportAbilitiesComboData(sportAbilitiesComboData.data);
         props.setUnitComboData(unitComboData);
         props.setGendersComboData(gendersComboData);
         props.setOrganisationsComboData(organisationsComboData);
         props.setExercisesComboData(exercisesComboData);
-        props.setpersonsComboData(personsComboData);
+        props.setpersonsComboData(personsComboData.data);
         props.settestTemplatesComboData(testTemplatesComboData);
         return sportAbilitiesComboData;
     }

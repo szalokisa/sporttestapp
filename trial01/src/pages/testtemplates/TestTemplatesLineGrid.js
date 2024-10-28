@@ -227,11 +227,11 @@ export default function TestTemplatesLineGrid(props) {
     return (<div className="TestTemplatesLineGrid">
         <h2>Sablon gyakorlatai / {parentName} </h2>
         <div className='row'>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
                 <button type='button' className='btn btn-close' onClick={closeMe}></button>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel1 ${props.view}`}>
                     <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
                 </div>
@@ -239,7 +239,7 @@ export default function TestTemplatesLineGrid(props) {
                     <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
                 <div className={`formbtndel2 ${props.view}`}>
                     <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
                 </div>

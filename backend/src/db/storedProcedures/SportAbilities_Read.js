@@ -2,7 +2,6 @@ import { StoredProcedure } from '@selesterkft/sel-db';
 import { db } from '../dbConnection';
 
 export async function SportAbilities_Read(queryParams) {
-    console.log('+++ SportAbilities_Read.js (line: 5)');
     const storedProcedure = new StoredProcedure('sss_SportAbilities_Read')
 
     storedProcedure.addParam('ID', 'int', queryParams.id);

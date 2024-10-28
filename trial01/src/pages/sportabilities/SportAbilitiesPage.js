@@ -15,7 +15,7 @@ function SportAbilitiesPage(props) {
                 <SportAbilitiesGrid
                     language={props.language}
                     dataEndpoint={`${process.env.REACT_APP_API_BASE_URL}/data`}
-                    sportAbilitiesComboData={props.sportAbilitiesComboData}
+                    setSportAbilitiesComboData={props.setSportAbilitiesComboData}
                     loginData={props.loginData}
                     setView={setView}
                     view={view}
