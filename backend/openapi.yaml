@@ -10,8 +10,8 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://localhost:4000
-  - url: https://sporttest.icymoss-3422d65a.westeurope.azurecontainerapps.io
+  - url: http://localhost:4001
+  - url: https://sporttest-backend--34gg7p9.wonderfulwater-6014855a.westeurope.azurecontainerapps.io
 tags:
   - name: api
     description: Checking service availability

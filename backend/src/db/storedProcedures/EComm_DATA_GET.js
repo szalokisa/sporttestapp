@@ -10,7 +10,6 @@ export async function EComm_DATA_GET(queryParams) {
     'NVarChar',
     queryParams.sqlWhereQuery
   );
-
   storedProcedure.addParam('SELECT', 'NVarChar', queryParams.select, { length: 'max' });
   storedProcedure.addParam('TOP', 'Int', sqlTop);
   storedProcedure.addParam('FROM', 'NVarChar', queryParams.from, { length: 'max' });

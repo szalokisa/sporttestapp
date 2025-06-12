@@ -11,7 +11,6 @@ export default class TokenService {
             error.status = 400;
             throw error;
         }
-
         let passwordOk = await Hash.compare(queryParams.password, dbResult.passHash);
         if (!passwordOk) {
             const error = new Error('invalid');
