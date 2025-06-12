@@ -105,7 +105,7 @@ export default function PageLogin(props) {
         props.setGendersComboData(gendersComboData);
         props.setOrganisationsComboData(organisationsComboData);
         props.setExercisesComboData(exercisesComboData);
-        props.setpersonsComboData(personsComboData.data);
+        props.setPersonsComboData(personsComboData.data);
         props.settestTemplatesComboData(testTemplatesComboData);
         return sportAbilitiesComboData;
     }

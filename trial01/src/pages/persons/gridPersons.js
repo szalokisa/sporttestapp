@@ -2,17 +2,44 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import saveRenderer from '../../components/renderers/saveRenderer'
-import axios from 'axios';
 import { validators } from '../../components/validators/validators';
+import saveRenderer from '../../components/renderers/saveRenderer';
+import axios from 'axios';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats'
+import GridComboData from '../../components/gridComboData';
+import { comboDefPersons } from '../../components/gridcombodefs/gridComboDefPersons';
+import "./gridPersons.scss";
+const myAjv = new Ajv()
+addFormats(myAjv)
+
+const ajvSchema = {
+    type: "object",
+    properties: {
+        ID: { type: "integer" },
+        PersonName: { type: "string", minLength: 1 },
+        EmailAddress: { type: "string", format: "email" },
+        BirthDay: { type: "string", minLength: 10 },
+        GenderName: { type: "string", minLength: 1 },
+        OrganisationName: { type: "string", minLength: 1 },
+    },
+    required: [
+        "PersonName",
+        "EmailAddress",
+    ],
+    additionalProperties: false,
+}
 
 const DataURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
-const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;
 
-export default function PersonsGrid(props) {
+function GridPersons(props) {
     const gridRef = useRef(); // Optional - for accessing Grid's API
     const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-
+    const [rowIndex, setRowIndex] = useState();
+    const comboPersonsProps = comboDefPersons;
+    comboPersonsProps.token = props.token;
+    comboPersonsProps.language = props.language;
+    console.log('!!!SSS gridPersons.js (line: 42)', props.gendersComboData);
     const getRowId = useCallback(function (params) {
         return params.data.ID;
     }, []);
@@ -40,6 +67,15 @@ export default function PersonsGrid(props) {
         {
             field: 'BirthDay',
             headerName: 'Születési dátum',
+            cellEditor: 'agTextCellEditor',
+            cellEditorPopup: false,
+            cellStyle: params => {
+                const invalid = validators.validate('required', params.value, props.language)
+                if (invalid) {
+                    return { backgroundColor: '#6e100a' };
+                }
+                return null;
+            },
             filter: true,
             editable: true
         },
@@ -88,30 +124,6 @@ export default function PersonsGrid(props) {
         },
     ]);
 
-    const onRowValueChanged = useCallback((event) => {
-        props.setView("HEAD")
-        SaveData(event.data);
-    }, []);
-
-    const onRowEditingStarted = useCallback((event) => {
-        props.setView("EDITING")
-    }, []);
-
-    const onRowEditingStopped = useCallback((event) => {
-        props.setView("HEAD")
-    }, []);
-
-    function stopEditing() {
-        gridRef.current.api.stopEditing();
-    }
-
-    const cellClickedListener = useCallback(event => {
-        if (event.colDef.field === 'btsave') {
-            stopEditing();
-        }
-    }, []);
-
-    // DefaultColDef sets props common to all Columns
     const defaultColDef = useMemo(() => ({
         sortable: true,
         resizable: true,
@@ -121,28 +133,56 @@ export default function PersonsGrid(props) {
         ShowData();
     }, []);
 
-    async function SaveData(saveprops) {
-        let recID = 0;
-        if (saveprops.ID) { recID = saveprops.ID }
-        axios.put(DataURL, {
-            token: props.loginData.token,
-            headers: {
-                'Content-Type': 'application/json',
-                ID: recID,
-                Data: saveprops,
-                Identifier: 'Persons',
-                comboidentifier: 'Persons',
-                with0: 'true'
-            }
-        })
-            .then(async (result) => {
+    useEffect(() => {
+        stateChangeHandling();
+    }, [props.formState])
+
+    const onRowValueChanged = useCallback(async (event) => {
+        const valid = fieldValid(event.data)
+        if (valid) {
+            await SaveData(event.data)
+        }
+    }, []);
+
+    async function handleCellClick(event) {
+        setRowIndex(event.node.rowIndex);
+        if (event.colDef.field === 'btsave') {
+            stopEditing();
+        }
+    }
+
+    const cellClickedListener = useCallback(
+        async event => await handleCellClick(event, setRowIndex, rowIndex, stopEditing),
+        [setRowIndex, rowIndex, stopEditing]
+    );
+
+    const onRowEditingStarted = useCallback((event) => {
+        console.log('!!!SSS gridPersons.js (line: 160)');
+        if (props.formState === 'HBASE') {
+            props.setFormState('HEDIT')
+        }
+        console.log('!!!SSS gridPersons.js (line: 164)');
+    }, []);
+
+    function stopEditing() {
+        gridRef.current.api.stopEditing();
+    }
+
+    async function stateChangeHandling() {
+        switch (props.formState) {
+            case 'HNEW':
+                addItem();
+                break;
+            case 'CANCELNEW':
                 await ShowData();
-                await props.setpersonsComboData(result.data.combodata.data);
-                return;
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+                props.setFormState("HBASE")
+                break;
+            case 'HDEL2':
+                await delRow2();
+                props.setFormState("HBASE")
+                break;
+            default:
+        }
     }
 
     function createNewRowData() {
@@ -153,7 +193,6 @@ export default function PersonsGrid(props) {
             EmailAddress: "",
             GenderName: "---",
             OrganisationName: "---",
-
         };
         return newData;
     }
@@ -169,50 +208,69 @@ export default function PersonsGrid(props) {
         return res;
     };
 
-    function delRow1() {
-        props.setView("trash1")
-    }
-
     async function delRow2() {
         const selectedData = gridRef.current.api.getSelectedRows();
         const deletedIds = JSON.stringify(selectedData.map(({ ID }) => ({ ID })));
-        axios.delete(DeleteRecordURL, {
+        axios.delete(DataURL, {
             headers: {
                 data: deletedIds,
-                datatable: "Persons",
-                comboidentifier: "Persons"
-            }
+                token: props.token,
+                collection: 'vPersons',
+                userName: props.userName,
+            },
         }).then(async (result) => {
             await ShowData()
-            await props.setpersonsComboData(result.data.combodata.data);
+            let comboData = await GridComboData(comboPersonsProps);
+            props.setPersonsComboData(comboData);
             return;
         }).catch((err) => {
             console.error(err);
         })
-
-        props.setView("HEAD")
     }
 
-    function delRowCancel() {
-        props.setView("HEAD")
+    function fieldValid(saveprops) {
+        let result = true;
+        const validate = myAjv.compile(ajvSchema);
+        result = validate(saveprops)
+        if (!result) console.log("validation error:", validate.errors)
+        return result;
+    }
+
+    async function SaveData(saveprops) {
+        let recID = 0;
+        if (saveprops.ID) { recID = saveprops.ID }
+        axios.put(DataURL, {
+            'Content-Type': 'application/json',
+            'token': props.token,
+            'collection': 'vPersons',
+            'userName': props.userName,
+            'ID': recID,
+            'Data': saveprops,
+        })
+            .then(async (result) => {
+                await ShowData();
+                props.setFormState("HBASE")
+                let comboData = await GridComboData(comboPersonsProps);
+                props.setPersonsComboData(comboData);
+                return;
+            })
+            .catch((err) => {
+                alert(err.response.data.message);
+                console.error(err);
+            });
     }
 
     async function ShowData() {
-        fetch(`${props.dataEndpoint}`, {
+        fetch(`${DataURL}`, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            token: props.loginData.token,
+            token: props.token,
             headers: {
                 'Content-Type': 'application/json',
                 language: props.language,
-                select: 'ID, PersonName, BirthDay, EmailAddress, GenderName, OrganisationName',
-                top: '500',
-                from: 'vPersons',
-                where: '',
-                groupby: '',
-                orderby: 'PersonName',
-                token: props.loginData.token,
+                'collection': 'vPersons',
+                'token': props.token,
             },
         })
             .then((data) => {
@@ -231,35 +289,9 @@ export default function PersonsGrid(props) {
             });
     }
 
-    return (<div className="PersonsGrid">
-        <div className='row'>
-            <div className="col-md-4">
-                <div className={`formbtnnew ${props.view}`}>
-                    <button type='button' className='btn btn-secondary' onClick={() => addItem(undefined)}>Új adat</button>
-                </div>
-                <div className={`formbtnnewplaceholder ${props.view}`}>
-                    <button type='button'
-                        className='btn btn-secondary'
-                        disabled={true}
-                        onClick={() => addItem(undefined)}>Új adat</button>
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className={`formbtndel1 ${props.view}`}>
-                    <button type='button' className='btn btn-warning' onClick={delRow1}>Kijelöltek törlése</button>
-                </div>
-                <div className={`formbtncancel ${props.view}`}>
-                    <button button type='button' className='btn btn-secondary' onClick={delRowCancel}>Mégsem</button>
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className={`formbtndel2 ${props.view}`}>
-                    <button button type='button' className='btn btn-danger' onClick={delRow2}>Törlés megerősítése</button>
-                </div>
-            </div>
-        </div>
-        <div className="row">
-            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: 300 }}>
+    return (
+        <div className="gridpage">
+            <div className="ag-theme-alpine-dark" style={{ width: '100%', height: '300pt' }}>
                 <AgGridReact ref={gridRef}
                     rowData={rowData}
                     columnDefs={columnDefs}
@@ -268,11 +300,12 @@ export default function PersonsGrid(props) {
                     editType={'fullRow'}
                     onRowValueChanged={onRowValueChanged}
                     onRowEditingStarted={onRowEditingStarted}
-                    onRowEditingStopped={onRowEditingStopped}
                     onCellClicked={cellClickedListener}
                     rowSelection='multiple'>
                 </AgGridReact>
             </div>
         </div>
-    </div>)
+    )
 }
+
+export default GridPersons;

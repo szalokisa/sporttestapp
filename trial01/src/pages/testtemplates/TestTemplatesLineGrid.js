@@ -4,7 +4,6 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import axios from 'axios';
 import saveRenderer from '../../components/renderers/saveRenderer'
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 const TestTemplatesLineURL = `${process.env.REACT_APP_API_BASE_URL}/data`;
 const DeleteRecordURL = `${process.env.REACT_APP_API_BASE_URL}/deleterec`;

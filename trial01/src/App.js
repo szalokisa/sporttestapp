@@ -6,9 +6,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginData from './components/LoginData';
 import PageLogin from './pages/login/PageLogin';
 import ExercisesPage from './pages/exercises/ExercisesPage';
-import SportAbilitiesPage from './pages/sportabilities/SportAbilitiesPage';
-import OrganisationsPage from './pages/organisations/OrganisationsPage';
-import PersonsPage from './pages/persons/PersonsPage';
+import PageSportAbilities from './pages/sportabilities/pageSportAbilities';
+import PageOrganisations from './pages/organisations/pageOrganisations';
+import PagePerons from './pages/persons/pagePersons';
+
 import TestTemplatesPage from './pages/testtemplates/TestTemplatesPage';
 import TestPage from './pages/tests/TestPage';
 import Statistics from './pages/statistics/pageStatistics';
@@ -22,8 +23,9 @@ function App() {
   const [gendersComboData, setGendersComboData] = useState();
   const [organisationsComboData, setOrganisationsComboData] = useState();
   const [exercisesComboData, setExercisesComboData] = useState();
-  const [personsComboData, setpersonsComboData] = useState();
+  const [personsComboData, setPersonsComboData] = useState();
   const [testTemplatesComboData, settestTemplatesComboData] = useState();
+  const [loginState, setLoginState] = useState('LOGOUT')
 
   function onLanguageChanged(newLanguage) {
     setLanguage(newLanguage);
@@ -73,7 +75,7 @@ function App() {
               setGendersComboData={setGendersComboData}
               setOrganisationsComboData={setOrganisationsComboData}
               setExercisesComboData={setExercisesComboData}
-              setpersonsComboData={setpersonsComboData}
+              setPersonsComboData={setPersonsComboData}
               settestTemplatesComboData={settestTemplatesComboData}
             />
           } />
@@ -108,33 +110,48 @@ function App() {
             <Routes>
               <Route path="/exercises" element={
                 <ExercisesPage
+                  loginstate={loginState}
+                  token={loginData.token}
+                  userName={loginData.tokenData.user.email}
                   language={language}
                   loginData={loginData}
                   sportAbilitiesComboData={sportAbilitiesComboData}
                   unitComboData={unitComboData}
+                  onLogout={onLogout}
                 />
               } />
               <Route path="/sportabilities" element={
-                <SportAbilitiesPage
+                <PageSportAbilities
+                  loginstate={loginState}
+                  token={loginData.token}
+                  // loginData={loginData}
+                  userName={loginData.tokenData.user.email}
                   language={language}
-                  loginData={loginData}
                   setSportAbilitiesComboData={setSportAbilitiesComboData}
-                />
+                  onLogout={onLogout}
+                ></PageSportAbilities>
               } />
               <Route path="/persons" element={
-                <PersonsPage
+                <PagePerons
+                  loginstate={loginState}
+                  token={loginData.token}
+                  userName={loginData.tokenData.user.email}
                   language={language}
+                  setPersonsComboData={setPersonsComboData}
                   gendersComboData={gendersComboData}
-                  loginData={loginData}
                   organisationsComboData={organisationsComboData}
-                  setpersonsComboData={setpersonsComboData}
-                  />
+                  onLogout={onLogout}
+                ></PagePerons>
               } />
               <Route path="/organisations" element={
-                <OrganisationsPage
+                <PageOrganisations
+                  loginstate={loginState}
+                  token={loginData.token}
+                  userName={loginData.tokenData.user.email}
                   language={language}
-                  loginData={loginData}
-                />
+                  setOrganisationsComboData={setOrganisationsComboData}
+                  onLogout={onLogout}
+                ></PageOrganisations>
               } />
               <Route path="/testtemplates" element={
                 <TestTemplatesPage

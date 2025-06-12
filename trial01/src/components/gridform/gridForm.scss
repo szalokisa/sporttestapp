@@ -1,0 +1,69 @@
+@import "../../App.scss";
+
+.gridformbtnrow.col-md-2 {
+    display: contents;
+}
+
+#gridbtnnew {
+    margin-left: 15pt;
+    margin-top: 10pt;
+}
+
+#gridbtndel {
+    margin-left: 15pt;
+    margin-top: 10pt;
+}
+
+#gridbtndel2 {
+    margin-left: 100pt;
+    margin-top: 10pt;
+}
+
+#gridbtncancel {
+    margin-left: 15pt;
+    margin-top: 10pt;
+}
+
+.rowedit.HBASE.row {
+    display: none;
+}
+
+.rowedit.HBASE1.row {
+    display: none;
+}
+
+.rowedit.HDEL.row {
+    display: none;
+}
+
+.rowedit.HDEL1.row {
+    display: none;
+}
+
+.rowdel.HBASE.row {
+    display: none;
+}
+
+.rowdel.HBASE1.row {
+    display: none;
+}
+
+.rowbase.HDEL.row {
+    display: none;
+}
+
+.rowbase.HEDIT.row {
+    display: none;
+}
+
+.rowdel.HEDIT.row {
+    display: none;
+}
+
+.rowbase.HNEW.row {
+    display: none;
+}
+
+.rowdel.HNEW.row {
+    display: none;
+}
